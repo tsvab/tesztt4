@@ -26,18 +26,9 @@ class _List1State extends State<List1> {
 
   Future<bool> getKiallitok() async {
     await fetchKiallito().then((value) {
-//print(value);
-//           if (mounted) {
-//             setState(() => {_elements = value});
-//          _elements = value;
-//          kiallitoList[] = Kiallito( value['name'] );
-//               _elements.add( name: value['name'], group: value['group'] ) ;
-//print("elements 1 : $_elements");
       value.forEach((element) {
-//print( element['name'] );
         kiallitoList.add(Kiallito(element['name']));
       });
-//print('kiallitoList: $kiallitoList') ;
       kiallitoList.sort(
           (a, b) => a.cegnev1.toLowerCase().compareTo(b.cegnev1.toLowerCase()));
     });
@@ -51,44 +42,28 @@ class _List1State extends State<List1> {
       await getKiallitok().then((value) {
         //print('kiallitoList: $kiallitoList');
       });
-      if (!kiallitoList.isEmpty) {
-        print("List is not empty");
+      if (kiallitoList.isEmpty) {
+        //print("List is not empty");
+        return false;
       }
     }
 
+    favouriteList = [];
+    normalList = [];
     strList = [];
-    // print('strList: $strList');
-    // strList.add('Márió');
-    // print('strList: $strList');
-    // normalList.add(
-    //   Slidable(
-    //     actionPane: SlidableDrawerActionPane(),
-    //     actionExtentRatio: 0.1,
-    //     secondaryActions: <Widget>[
-    //       IconSlideAction(
-    //         iconWidget: Icon(Icons.star),
-    //         onTap: () {},
-    //       ),
-    //       IconSlideAction(
-    //         iconWidget: Icon(Icons.more_horiz),
-    //         onTap: () {},
-    //       ),
-    //     ],
-    //     child: ListTile(
-    //       leading: CircleAvatar(
-    //           //backgroundImage: NetworkImage("http://placeimg.com/200/200/people"),
-    //           ),
-    //       title: Text('Márió'),
-    //       subtitle: Text('profi'),
-    //     ),
-    //   ),
-    // );
 
-    kiallitoList.forEach((kiallito) {
-      String name = '';
+    List<Kiallito> kiallitoListFiltered = [];
+    kiallitoListFiltered.addAll(kiallitoList);
+    if (searchController.text.isNotEmpty) {
+      kiallitoListFiltered.retainWhere((kiallito) => kiallito.cegnev1
+          .toLowerCase()
+          .contains(searchController.text.toLowerCase()));
+      print(kiallitoListFiltered);
+    }
+
+    kiallitoListFiltered.forEach((kiallito) {
       if (true) {
-        name = kiallito.cegnev1;
-        strList.add(name.toUpperCase());
+        strList.add(kiallito.cegnev1.toUpperCase());
 
         normalList.add(
           Slidable(
@@ -116,6 +91,12 @@ class _List1State extends State<List1> {
       }
     });
 
+    setState(() {
+      favouriteList;
+      normalList;
+      strList;
+    });
+
     return true;
   }
 
@@ -131,10 +112,10 @@ class _List1State extends State<List1> {
     // }
     // userList
     //     .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-    // filterList();
-    //searchController.addListener(() {
-    //filterList();
-    //});
+    filteredList();
+    searchController.addListener(() {
+      filteredList();
+    });
     super.initState();
   }
 
@@ -231,7 +212,7 @@ class _List1State extends State<List1> {
 
   @override
   Widget build(BuildContext context) {
-    var currentStr = "";
+    //var currentStr = "";
     // print('strList $strList');
     // print('normalList $normalList');
     // print('favouriteList $favouriteList');
@@ -260,20 +241,20 @@ class _List1State extends State<List1> {
                 headerWidgetList: <AlphabetScrollListHeader>[
                   AlphabetScrollListHeader(
                       widgetList: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: TextFormField(
-                            controller: searchController,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              suffix: Icon(
-                                Icons.search,
-                                color: Colors.grey,
-                              ),
-                              labelText: "Search",
-                            ),
-                          ),
-                        )
+                        // Padding(
+                        //   padding: const EdgeInsets.all(16.0),
+                        //   child: TextFormField(
+                        //     controller: searchController,
+                        //     decoration: InputDecoration(
+                        //       border: OutlineInputBorder(),
+                        //       suffix: Icon(
+                        //         Icons.search,
+                        //         color: Colors.grey,
+                        //       ),
+                        //       labelText: "Keresés",
+                        //     ),
+                        //   ),
+                        // )
                       ],
                       icon: Icon(Icons.search),
                       indexedHeaderHeight: (index) => 80),
@@ -294,7 +275,6 @@ class _List1State extends State<List1> {
                   Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      // crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CircularProgressIndicator(),
                       ],
