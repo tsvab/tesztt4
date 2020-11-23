@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'list1.dart' ;
+import 'list1.dart';
 
 class Page1 extends StatelessWidget {
   @override
@@ -36,4 +36,3 @@ class Page1 extends StatelessWidget {
     );
   }
 }
-

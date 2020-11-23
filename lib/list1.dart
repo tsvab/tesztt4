@@ -1,8 +1,16 @@
-import 'package:flutter/material.dart' ;
 import 'package:alphabet_list_scroll_view/alphabet_list_scroll_view.dart';
-import 'kiallito1.dart' ;
+//import 'package:faker/faker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'kiallito1.dart';
 
+class Kiallito {
+  final String cegnev1;
+  final bool favourite;
 
+  Kiallito(this.cegnev1, {this.favourite = false});
+}
 
 class List1 extends StatefulWidget {
   @override
@@ -10,47 +18,109 @@ class List1 extends StatefulWidget {
 }
 
 class _List1State extends State<List1> {
-
+  List<Kiallito> kiallitoList = [];
+  List<String> strList = [];
   List<Widget> favouriteList = [];
   List<Widget> normalList = [];
-  List<String> strList = [];
+  TextEditingController searchController = TextEditingController();
 
-  List<dynamic>  _elements;
-
-  Future<bool> getKiallito() async {
-print('HAHO5 getKiallito');
-    await fetchKiallito().then(
-            (value) {
+  Future<bool> getKiallitok() async {
+    await fetchKiallito().then((value) {
+//print(value);
 //           if (mounted) {
 //             setState(() => {_elements = value});
-          _elements = value;
+//          _elements = value;
+//          kiallitoList[] = Kiallito( value['name'] );
 //               _elements.add( name: value['name'], group: value['group'] ) ;
 //print("elements 1 : $_elements");
-        }
-    );
-    return true ;
+      value.forEach((element) {
+//print( element['name'] );
+        kiallitoList.add(Kiallito(element['name']));
+      });
+//print('kiallitoList: $kiallitoList') ;
+      kiallitoList.sort(
+          (a, b) => a.cegnev1.toLowerCase().compareTo(b.cegnev1.toLowerCase()));
+    });
+    return true;
   }
 
+  Future<bool> filteredList() async {
+    //print('kiallitoList.isEmpty: {kiallitoList.isEmpty()}');
+    if (kiallitoList.isEmpty) {
+      print("List is empty");
+      await getKiallitok().then((value) {
+        //print('kiallitoList: $kiallitoList');
+      });
+      if (!kiallitoList.isEmpty) {
+        print("List is not empty");
+      }
+    }
 
-  filterList() {
-    favouriteList = [];
-    normalList = [];
     strList = [];
+    // print('strList: $strList');
+    // strList.add('Márió');
+    // print('strList: $strList');
+    // normalList.add(
+    //   Slidable(
+    //     actionPane: SlidableDrawerActionPane(),
+    //     actionExtentRatio: 0.1,
+    //     secondaryActions: <Widget>[
+    //       IconSlideAction(
+    //         iconWidget: Icon(Icons.star),
+    //         onTap: () {},
+    //       ),
+    //       IconSlideAction(
+    //         iconWidget: Icon(Icons.more_horiz),
+    //         onTap: () {},
+    //       ),
+    //     ],
+    //     child: ListTile(
+    //       leading: CircleAvatar(
+    //           //backgroundImage: NetworkImage("http://placeimg.com/200/200/people"),
+    //           ),
+    //       title: Text('Márió'),
+    //       subtitle: Text('profi'),
+    //     ),
+    //   ),
+    // );
 
+    kiallitoList.forEach((kiallito) {
+      String name = '';
+      if (true) {
+        name = kiallito.cegnev1;
+        strList.add(name.toUpperCase());
 
-    setState(() {
-      favouriteList;
-      normalList;
-      strList;
+        normalList.add(
+          Slidable(
+            actionPane: SlidableDrawerActionPane(),
+            actionExtentRatio: 0.1,
+            secondaryActions: <Widget>[
+              IconSlideAction(
+                iconWidget: Icon(Icons.star),
+                onTap: () {},
+              ),
+              IconSlideAction(
+                iconWidget: Icon(Icons.more_horiz),
+                onTap: () {},
+              ),
+            ],
+            child: ListTile(
+              leading: CircleAvatar(
+                  //backgroundImage: NetworkImage("http://placeimg.com/200/200/people"),
+                  ),
+              title: Text(kiallito.cegnev1),
+              subtitle: Text(''),
+            ),
+          ),
+        );
+      }
     });
+
+    return true;
   }
 
   @override
   void initState() {
-print('HAHO Initstate');
-    getKiallito() ;
-//print('_elements: $_elements') ;
-    //
     // for (var i = 0; i < 100; i++) {
     //   var name = faker.person.name();
     //   userList.add(User(name, faker.company.name(), false));
@@ -59,28 +129,181 @@ print('HAHO Initstate');
     //   var name = faker.person.name();
     //   userList.add(User(name, faker.company.name(), true));
     // }
-    // userList.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    // userList
+    //     .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
     // filterList();
-    // searchController.addListener(() {
-    //   filterList();
-    // });
+    //searchController.addListener(() {
+    //filterList();
+    //});
     super.initState();
   }
 
+  // filterList() {
+  //   // List<Kiallito> users = [];
+  //   users.addAll(userList);
+  //   favouriteList = [];
+  //   normalList = [];
+  //   strList = [];
+  //   if (searchController.text.isNotEmpty) {
+  //     users.retainWhere((user) => user.name
+  //         .toLowerCase()
+  //         .contains(searchController.text.toLowerCase()));
+  //   }
+  //   users.forEach((user) {
+  //     if (user.favourite) {
+  //       favouriteList.add(
+  //         Slidable(
+  //           actionPane: SlidableDrawerActionPane(),
+  //           actionExtentRatio: 0.25,
+  //           secondaryActions: <Widget>[
+  //             IconSlideAction(
+  //               iconWidget: Icon(Icons.star),
+  //               onTap: () {},
+  //             ),
+  //             IconSlideAction(
+  //               iconWidget: Icon(Icons.more_horiz),
+  //               onTap: () {},
+  //             ),
+  //           ],
+  //           child: ListTile(
+  //             leading: Stack(
+  //               children: <Widget>[
+  //                 CircleAvatar(
+  //                   backgroundImage:
+  //                       NetworkImage("http://placeimg.com/200/200/people"),
+  //                 ),
+  //                 Container(
+  //                     height: 40,
+  //                     width: 40,
+  //                     child: Center(
+  //                       child: Icon(
+  //                         Icons.star,
+  //                         color: Colors.yellow[100],
+  //                       ),
+  //                     ))
+  //               ],
+  //             ),
+  //             title: Text(user.name),
+  //             subtitle: Text(user.company),
+  //           ),
+  //         ),
+  //       );
+  //     } else {
+  //       normalList.add(
+  //         Slidable(
+  //           actionPane: SlidableDrawerActionPane(),
+  //           actionExtentRatio: 0.1,
+  //           secondaryActions: <Widget>[
+  //             IconSlideAction(
+  //               iconWidget: Icon(Icons.star),
+  //               onTap: () {},
+  //             ),
+  //             IconSlideAction(
+  //               iconWidget: Icon(Icons.more_horiz),
+  //               onTap: () {},
+  //             ),
+  //           ],
+  //           child: ListTile(
+  //             leading: CircleAvatar(
+  //               backgroundImage:
+  //                   NetworkImage("http://placeimg.com/200/200/people"),
+  //             ),
+  //             title: Text(user.name),
+  //             subtitle: Text(user.company),
+  //           ),
+  //         ),
+  //       );
+  //       strList.add(user.name);
+  //     }
+  //   });
+  //
+  //   setState(() {
+  //     favouriteList;
+  //     normalList;
+  //     strList;
+  //   });
+  // }
 
   @override
   void dispose() {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    // return AlphabetListScrollView(
-    //     strList: strList,
-    //     indexedHeight: null
-    // );
-    return Text('sssSSSWWWWQQQRRRREEFFFFFEEEEEEEERRQQQQQ') ;
+    var currentStr = "";
+    // print('strList $strList');
+    // print('normalList $normalList');
+    // print('favouriteList $favouriteList');
+    return FutureBuilder(
+        future: filteredList(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+//print( 'snapshot: $snapshot' );
+//print( 'snapshot: ${snapshot.hasData}' );
+          if (snapshot.hasData) {
+//print('elements 222: $_elements');
+//print('elements 333: $_elements2');
+            return Expanded(
+              child: AlphabetListScrollView(
+                strList: strList,
+                highlightTextStyle: TextStyle(
+                  color: Colors.yellow,
+                ),
+                showPreview: true,
+                itemBuilder: (context, index) {
+                  return normalList[index];
+                },
+                indexedHeight: (i) {
+                  return 80;
+                },
+                keyboardUsage: true,
+                headerWidgetList: <AlphabetScrollListHeader>[
+                  AlphabetScrollListHeader(
+                      widgetList: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: TextFormField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              suffix: Icon(
+                                Icons.search,
+                                color: Colors.grey,
+                              ),
+                              labelText: "Search",
+                            ),
+                          ),
+                        )
+                      ],
+                      icon: Icon(Icons.search),
+                      indexedHeaderHeight: (index) => 80),
+                  AlphabetScrollListHeader(
+                      widgetList: favouriteList,
+                      icon: Icon(Icons.star),
+                      indexedHeaderHeight: (index) {
+                        return 80;
+                      }),
+                ],
+              ),
+            );
+          } else {
+            return Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      // crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+        });
   }
 }
-
