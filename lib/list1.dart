@@ -26,6 +26,7 @@ class _List1State extends State<List1> {
 
   Future<bool> getKiallitok() async {
     await fetchKiallito().then((value) {
+      print(value.length);
       value.forEach((element) {
         kiallitoList.add(Kiallito(element['name']));
       });
@@ -38,14 +39,14 @@ class _List1State extends State<List1> {
   Future<bool> filteredList() async {
     //print('kiallitoList.isEmpty: {kiallitoList.isEmpty()}');
     if (kiallitoList.isEmpty) {
-      print("List is empty");
+      print("kiallitoList List is empty");
       await getKiallitok().then((value) {
         //print('kiallitoList: $kiallitoList');
+        if (kiallitoList.isEmpty) {
+          //print("List is not empty");
+          return false;
+        }
       });
-      if (kiallitoList.isEmpty) {
-        //print("List is not empty");
-        return false;
-      }
     }
 
     favouriteList = [];
@@ -53,16 +54,20 @@ class _List1State extends State<List1> {
     strList = [];
 
     List<Kiallito> kiallitoListFiltered = [];
+    print(kiallitoList.length);
+
+    kiallitoListFiltered.clear();
     kiallitoListFiltered.addAll(kiallitoList);
     if (searchController.text.isNotEmpty) {
       kiallitoListFiltered.retainWhere((kiallito) => kiallito.cegnev1
           .toLowerCase()
           .contains(searchController.text.toLowerCase()));
-      print(kiallitoListFiltered);
     }
+    print(kiallitoListFiltered.length);
 
     kiallitoListFiltered.forEach((kiallito) {
       if (true) {
+        //print('kiallitoListFiltered : ${kiallito.cegnev1} ');
         strList.add(kiallito.cegnev1.toUpperCase());
 
         normalList.add(
@@ -112,7 +117,7 @@ class _List1State extends State<List1> {
     // }
     // userList
     //     .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-    filteredList();
+    //filteredList();
     searchController.addListener(() {
       filteredList();
     });
@@ -241,20 +246,20 @@ class _List1State extends State<List1> {
                 headerWidgetList: <AlphabetScrollListHeader>[
                   AlphabetScrollListHeader(
                       widgetList: [
-                        // Padding(
-                        //   padding: const EdgeInsets.all(16.0),
-                        //   child: TextFormField(
-                        //     controller: searchController,
-                        //     decoration: InputDecoration(
-                        //       border: OutlineInputBorder(),
-                        //       suffix: Icon(
-                        //         Icons.search,
-                        //         color: Colors.grey,
-                        //       ),
-                        //       labelText: "Keresés",
-                        //     ),
-                        //   ),
-                        // )
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: TextFormField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              suffix: Icon(
+                                Icons.search,
+                                color: Colors.grey,
+                              ),
+                              labelText: "Keresés",
+                            ),
+                          ),
+                        )
                       ],
                       icon: Icon(Icons.search),
                       indexedHeaderHeight: (index) => 80),
