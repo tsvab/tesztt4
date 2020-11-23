@@ -36,7 +36,7 @@ class Page0 extends StatelessWidget {
                   child: Align(
                     child:
                     FlatButton(
-                      color: Colors.brown,
+                      color: Colors.red,
                       //backgroundColor: Colors.green,
                       child: Text('List 1'),
                       onPressed: (){

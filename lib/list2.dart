@@ -102,7 +102,8 @@ print('elements 0: $_elements');
               elements: _elements,
               groupBy: (element) => element['group'],
               itemComparator: (item1, item2) =>
-                  item1['name'].compareTo(item2['name']),
+                  //item1['name'].compareTo(item2['name']),
+                  item1['name'].toLowerCase().compareTo(item2['name'].toLowerCase()),
               itemBuilder: (c, element) {
                 return Card(
                   shape: RoundedRectangleBorder(
