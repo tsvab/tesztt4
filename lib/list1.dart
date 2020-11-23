@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'kiallito1.dart';
+import 'listcard1.dart';
 
 class Kiallito {
   final String cegnev1;
+  final String urllogo;
   final bool favourite;
 
-  Kiallito(this.cegnev1, {this.favourite = false});
+  Kiallito(this.cegnev1, {this.urllogo = '', this.favourite = false});
 }
 
 class List1 extends StatefulWidget {
@@ -28,7 +30,8 @@ class _List1State extends State<List1> {
     await fetchKiallito().then((value) {
       print(value.length);
       value.forEach((element) {
-        kiallitoList.add(Kiallito(element['name']));
+        kiallitoList
+            .add(Kiallito(element['name'], urllogo: element['urllogo']));
       });
       kiallitoList.sort(
           (a, b) => a.cegnev1.toLowerCase().compareTo(b.cegnev1.toLowerCase()));
@@ -71,28 +74,31 @@ class _List1State extends State<List1> {
         strList.add(kiallito.cegnev1.toUpperCase());
 
         normalList.add(
-          Slidable(
-            actionPane: SlidableDrawerActionPane(),
-            actionExtentRatio: 0.1,
-            secondaryActions: <Widget>[
-              IconSlideAction(
-                iconWidget: Icon(Icons.star),
-                onTap: () {},
-              ),
-              IconSlideAction(
-                iconWidget: Icon(Icons.more_horiz),
-                onTap: () {},
-              ),
-            ],
-            child: ListTile(
-              leading: CircleAvatar(
-                  //backgroundImage: NetworkImage("http://placeimg.com/200/200/people"),
-                  ),
-              title: Text(kiallito.cegnev1),
-              subtitle: Text(''),
-            ),
-          ),
-        );
+            ListCard1(cegnev1: kiallito.cegnev1, urllogo: kiallito.urllogo)
+
+            // Slidable(
+            //   actionPane: SlidableDrawerActionPane(),
+            //   actionExtentRatio: 0.1,
+            //   secondaryActions: <Widget>[
+            //     IconSlideAction(
+            //       iconWidget: Icon(Icons.star),
+            //       onTap: () {},
+            //     ),
+            //     IconSlideAction(
+            //       iconWidget: Icon(Icons.more_horiz),
+            //       onTap: () {},
+            //     ),
+            //   ],
+            //   child: ListTile(
+            //     leading: CircleAvatar(
+            //         //backgroundImage: NetworkImage("http://placeimg.com/200/200/people"),
+            //         ),
+            //     title: Text(kiallito.cegnev1),
+            //     subtitle: Text(''),
+            //   ),
+            // ),
+
+            );
       }
     });
 
@@ -233,7 +239,7 @@ class _List1State extends State<List1> {
               child: AlphabetListScrollView(
                 strList: strList,
                 highlightTextStyle: TextStyle(
-                  color: Colors.yellow,
+                  color: Colors.black,
                 ),
                 showPreview: true,
                 itemBuilder: (context, index) {
@@ -252,11 +258,11 @@ class _List1State extends State<List1> {
                             controller: searchController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
-                              suffix: Icon(
-                                Icons.search,
-                                color: Colors.grey,
-                              ),
-                              labelText: "Keresés",
+                              // suffix: Icon(
+                              //   Icons.search,
+                              //   color: Colors.grey,
+                              // ),
+                              labelText: "Search",
                             ),
                           ),
                         )
