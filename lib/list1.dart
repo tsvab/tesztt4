@@ -7,11 +7,16 @@ import 'kiallito1.dart';
 import 'listcard1.dart';
 
 class Kiallito {
+  final String ppid;
   final String cegnev1;
   final String urllogo;
   final bool favourite;
 
-  Kiallito(this.cegnev1, {this.urllogo = '', this.favourite = false});
+  Kiallito(
+      {this.ppid = '',
+      this.cegnev1 = '',
+      this.urllogo = '',
+      this.favourite = false});
 }
 
 class List1 extends StatefulWidget {
@@ -30,8 +35,10 @@ class _List1State extends State<List1> {
     await fetchKiallito().then((value) {
       print(value.length);
       value.forEach((element) {
-        kiallitoList
-            .add(Kiallito(element['name'], urllogo: element['urllogo']));
+        kiallitoList.add(Kiallito(
+            ppid: element['ppid'],
+            cegnev1: element['name'],
+            urllogo: element['urllogo']));
       });
       kiallitoList.sort(
           (a, b) => a.cegnev1.toLowerCase().compareTo(b.cegnev1.toLowerCase()));
@@ -73,8 +80,10 @@ class _List1State extends State<List1> {
         //print('kiallitoListFiltered : ${kiallito.cegnev1} ');
         strList.add(kiallito.cegnev1.toUpperCase());
 
-        normalList.add(
-            ListCard1(cegnev1: kiallito.cegnev1, urllogo: kiallito.urllogo)
+        normalList.add(ListCard1(
+                ppid: kiallito.ppid,
+                cegnev1: kiallito.cegnev1,
+                urllogo: kiallito.urllogo)
 
             // Slidable(
             //   actionPane: SlidableDrawerActionPane(),
