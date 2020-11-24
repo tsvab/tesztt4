@@ -35,7 +35,7 @@ Future<List<dynamic>> fetchKiallitok() async {
   }
 }
 
-Future<Kiallito<dynamic>> fetchKiallito(String ppid) async {
+Future<Kiallito> fetchKiallito(String ppid) async {
   final String url =
       //"https://eregistrator.hu/6/index.php?r=kialllista/kialllista1/list&pridlist=CSA19&orgid=00158376&lngid=hu&pagesize=50&mode=K&up=1&upevent=ipar-napjai&app=1";
       "https://eregistrator.hu/6/index.php?r=kialllista/kialllista1/ppid&ppid=" +
