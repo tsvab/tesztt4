@@ -6,13 +6,43 @@ class Kiallito {
   final String ppid;
   final String cegnev;
   final String urllogo;
+  final List standlista;
+  final String magunkrol;
   final bool favourite;
 
   Kiallito(
       {this.ppid = '',
       this.cegnev = '',
       this.urllogo = '',
+      this.standlista,
+      this.magunkrol = '',
       this.favourite = false});
+
+  String get helylist {
+    String ret = '';
+    this.standlista.forEach((element) {
+      if (ret != '') {
+        ret += ', ';
+      }
+      ret += element['nevpavilon'] + ' ' + element['stand'];
+    });
+
+    return ret;
+  }
+
+  factory Kiallito.fromJson(Map<String, dynamic> json) {
+    return Kiallito(
+      ppid: json['ppid'],
+      cegnev: json['cegnev'],
+      urllogo: json['urllogo'],
+      standlista: json['standlista'] ?? [],
+      magunkrol: json['magunkrol'] ?? '',
+    );
+  }
+
+  @override
+  String toString() =>
+      '$runtimeType(${this.ppid}, \"${this.cegnev}\", \"${this.urllogo}\", \"${this.standlista}\")';
 }
 
 Future<List<dynamic>> fetchKiallitok() async {
@@ -47,10 +77,13 @@ Future<Kiallito> fetchKiallito(String ppid) async {
     // If the server did return a 200 OK response,
     // then parse the JSON.
     // return Kiallito.fromJson(jsonDecode(response.body))
-    print('response statuscode: ${response.statusCode}');
+    //print('response statuscode: ${response.statusCode}');
     //Kiallito kiallito = jsonDecode(response.body);
+    //print(jsonDecode(response.body));
+
     Kiallito kiallito;
-    print(jsonDecode(response.body));
+    kiallito = Kiallito.fromJson(json.decode(response.body));
+    //print(kiallito);
 
     return kiallito;
   } else {

@@ -12,31 +12,7 @@ class PageCardPpid extends StatelessWidget {
       appBar: AppBar(
         title: Text('PagePpid'),
       ),
-      body: Row(
-        children: [
-          //List1(),
-          CardPpid1(ppid: ppid),
-          // Expanded(
-          //   // flex: 3,
-          //   child: Column(
-          //     children: [
-          //       Expanded(
-          //         child: Align(
-          //           child:
-          //           FloatingActionButton(
-          //             backgroundColor: Colors.yellow,
-          //             onPressed: (){
-          //               Navigator.pop(context) ;
-          //             },
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //
-          //   ),
-          // ),
-        ],
-      ),
+      body: CardPpid1(ppid: ppid),
     );
   }
 }
