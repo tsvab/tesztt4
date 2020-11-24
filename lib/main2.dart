@@ -123,12 +123,12 @@ class _MainAppState extends State<MainApp> {
       }
     });
 
-    setState(() {
-      strList;
-      favouriteList;
-      normalList;
-      strList;
-    });
+    // setState(() {
+    //   strList;
+    //   favouriteList;
+    //   normalList;
+    //   strList;
+    // });
   }
 
   @override
@@ -138,7 +138,7 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    var currentStr = "";
+    // var currentStr = "";
     return MaterialApp(
         home: Scaffold(
       appBar: AppBar(

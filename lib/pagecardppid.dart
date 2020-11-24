@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tesztt4/cardppid1.dart';
-import 'list2.dart';
 
 class PageCardPpid extends StatelessWidget {
   final ppid;

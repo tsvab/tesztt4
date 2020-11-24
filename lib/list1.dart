@@ -2,7 +2,7 @@ import 'package:alphabet_list_scroll_view/alphabet_list_scroll_view.dart';
 //import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+//import 'package:flutter_slidable/flutter_slidable.dart';
 import 'kiallito1.dart';
 import 'listcard1.dart';
 
@@ -111,11 +111,11 @@ class _List1State extends State<List1> {
       }
     });
 
-    setState(() {
-      favouriteList;
-      normalList;
-      strList;
-    });
+    // setState(() {
+    //   favouriteList;
+    //   normalList;
+    //   strList;
+    // });
 
     return true;
   }
