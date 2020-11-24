@@ -1,60 +1,57 @@
 import 'package:flutter/material.dart';
 //import 'package:cached_network_image/cached_network_image.dart';
 //import 'package:http/http.dart' as http;
+import 'kiallito1.dart';
 
-class CardPpid1 extends StatelessWidget {
+class CardPpid1 extends StatefulWidget {
   final String ppid;
-  // final String cegnev1;
-  // final String urllogo;
+//  CardPpid1({Key key, @required this.recordObject}) : super(key: key);
+  CardPpid1({Key key, this.ppid}) : super(key: key);
 
-  // CardPpid1({Key key, this.ppid = '', this.cegnev1 = '', this.urllogo = ''})
-  //     : super(key: key);
-  CardPpid1(this.ppid);
-  // Print () {
-  //   print( 'cegnev1: $this.urllogo, urllogo: $this.urllogo' );
-  // } ;
+  @override
+  _CardPpid1State createState() => _CardPpid1State(ppid);
+}
 
-  // @override
-  // String toString() {
-  //   return 'ListCard1: {cegnev1: ${cegnev1}, urllogo: ${urllogo}}';
-  // }
+class _CardPpid1State extends State<CardPpid1> {
+  String ppid;
+  Kiallito kiallito;
+
+  _CardPpid1State(this.ppid); //constructor
+
+  Future<bool> getKiallito(ppid) async {
+    // Future<void> getKiallito() async {
+    await fetchKiallito(ppid).then((value) {
+      kiallito = value;
+      print(kiallito);
+    });
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Text(ppid);
-//     return Card(
-//       shape: RoundedRectangleBorder(
-//         borderRadius: const BorderRadius.all(
-//           Radius.circular(1.0),
-//         ),
-//       ),
-//       elevation: 2.0,
-//       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-//       child: Container(
-//         child: ListTile(
-//             onTap: () {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(builder: (context) => PagePpid()),
-//               );
-//             },
-//             contentPadding:
-//             EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-// // leading: Icon(Icons.account_circle),
-//             leading: SizedBox(
-//               child: urllogo == ''
-//                   ? Container()
-// // : Image.network(element['urllogo']),
-//                   : CachedNetworkImage(
-//                 imageUrl: urllogo,
-//                 placeholder: (context, url) => Container(),
-//                 //errorWidget: (context, url, error) => Icon(Icons.error),
-//               ),
-//               width: 100,
-//             ),
-//             title: Text(cegnev1) //trailing: Icon(Icons.arrow_forward),
-//         ),
-//       ),
-//     );
+    return FutureBuilder(
+        future: getKiallito(ppid),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.hasData) {
+            return Text('van adat');
+          } else {
+            return Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      // crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+        });
   }
 }

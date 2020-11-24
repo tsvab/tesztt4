@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'page1.dart' ;
-import 'page2.dart' ;
+import 'page1.dart';
+import 'page2.dart';
+import 'pageteszt.dart';
 
 class Page0 extends StatelessWidget {
   @override
@@ -34,12 +35,11 @@ class Page0 extends StatelessWidget {
               children: [
                 Expanded(
                   child: Align(
-                    child:
-                    FlatButton(
+                    child: FlatButton(
                       color: Colors.red,
                       //backgroundColor: Colors.green,
                       child: Text('List 1'),
-                      onPressed: (){
+                      onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Page1()),
@@ -50,12 +50,11 @@ class Page0 extends StatelessWidget {
                 ),
                 Expanded(
                   child: Align(
-                    child:
-                    FlatButton(
+                    child: FlatButton(
                       color: Colors.blue,
                       //backgroundColor: Colors.red,
                       child: Text('List2 OK'),
-                      onPressed: (){
+                      onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Page2()),
@@ -64,8 +63,22 @@ class Page0 extends StatelessWidget {
                     ),
                   ),
                 ),
+                Expanded(
+                  child: Align(
+                    child: FlatButton(
+                      color: Colors.blue,
+                      //backgroundColor: Colors.red,
+                      child: Text('Teszt'),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PageTeszt()),
+                        );
+                      },
+                    ),
+                  ),
+                ),
               ],
-
             ),
           ),
         ],
@@ -73,4 +86,3 @@ class Page0 extends StatelessWidget {
     );
   }
 }
-

@@ -15,7 +15,7 @@ class PageCardPpid extends StatelessWidget {
       body: Row(
         children: [
           //List1(),
-          CardPpid1(ppid),
+          CardPpid1(ppid: ppid),
           // Expanded(
           //   // flex: 3,
           //   child: Column(

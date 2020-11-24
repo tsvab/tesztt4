@@ -6,19 +6,6 @@ import 'package:flutter/rendering.dart';
 import 'kiallito1.dart';
 import 'listcard1.dart';
 
-class Kiallito {
-  final String ppid;
-  final String cegnev1;
-  final String urllogo;
-  final bool favourite;
-
-  Kiallito(
-      {this.ppid = '',
-      this.cegnev1 = '',
-      this.urllogo = '',
-      this.favourite = false});
-}
-
 class List1 extends StatefulWidget {
   @override
   _List1State createState() => _List1State();
@@ -32,16 +19,16 @@ class _List1State extends State<List1> {
   TextEditingController searchController = TextEditingController();
 
   Future<bool> getKiallitok() async {
-    await fetchKiallito().then((value) {
+    await fetchKiallitok().then((value) {
       print(value.length);
       value.forEach((element) {
         kiallitoList.add(Kiallito(
             ppid: element['ppid'],
-            cegnev1: element['name'],
+            cegnev: element['cegnev'],
             urllogo: element['urllogo']));
       });
       kiallitoList.sort(
-          (a, b) => a.cegnev1.toLowerCase().compareTo(b.cegnev1.toLowerCase()));
+          (a, b) => a.cegnev.toLowerCase().compareTo(b.cegnev.toLowerCase()));
     });
     return true;
   }
@@ -69,7 +56,7 @@ class _List1State extends State<List1> {
     kiallitoListFiltered.clear();
     kiallitoListFiltered.addAll(kiallitoList);
     if (searchController.text.isNotEmpty) {
-      kiallitoListFiltered.retainWhere((kiallito) => kiallito.cegnev1
+      kiallitoListFiltered.retainWhere((kiallito) => kiallito.cegnev
           .toLowerCase()
           .contains(searchController.text.toLowerCase()));
     }
@@ -77,12 +64,12 @@ class _List1State extends State<List1> {
 
     kiallitoListFiltered.forEach((kiallito) {
       if (true) {
-        //print('kiallitoListFiltered : ${kiallito.cegnev1} ');
-        strList.add(kiallito.cegnev1.toUpperCase());
+        //print('kiallitoListFiltered : ${kiallito.cegnev} ');
+        strList.add(kiallito.cegnev.toUpperCase());
 
         normalList.add(ListCard1(
                 ppid: kiallito.ppid,
-                cegnev1: kiallito.cegnev1,
+                cegnev: kiallito.cegnev,
                 urllogo: kiallito.urllogo)
 
             // Slidable(
@@ -102,7 +89,7 @@ class _List1State extends State<List1> {
             //     leading: CircleAvatar(
             //         //backgroundImage: NetworkImage("http://placeimg.com/200/200/people"),
             //         ),
-            //     title: Text(kiallito.cegnev1),
+            //     title: Text(kiallito.cegnev),
             //     subtitle: Text(''),
             //   ),
             // ),
