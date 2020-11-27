@@ -7,18 +7,26 @@ import 'package:flutter/widgets.dart';
 //import 'package:http/http.dart' as http;
 import 'kiallito1.dart';
 
-class CardPpid1 extends StatefulWidget {
+class CardPpid2 extends StatefulWidget {
   final String ppid;
-//  CardPpid1({Key key, @required this.recordObject}) : super(key: key);
-  CardPpid1({Key key, this.ppid}) : super(key: key);
+//  CardPpid2({Key key, @required this.recordObject}) : super(key: key);
+  CardPpid2({Key key, this.ppid}) : super(key: key);
 
   @override
-  _CardPpid1State createState() => _CardPpid1State();
+  _CardPpid2State createState() => _CardPpid2State();
 }
 
-class _CardPpid1State extends State<CardPpid1>
+class _CardPpid2State extends State<CardPpid2>
     with SingleTickerProviderStateMixin {
   TabController _controller;
+  int _tabIndex = 0;
+
+  final List<Widget> myTabs = [
+    Tab(text: 'one'),
+    Tab(text: 'two'),
+    Tab(text: 'three'),
+    Tab(text: 'four'),
+  ];
 
   Kiallito kiallito;
 
@@ -34,7 +42,16 @@ class _CardPpid1State extends State<CardPpid1>
   @override
   void initState() {
     super.initState();
-    _controller = new TabController(length: 2, vsync: this);
+    _controller = TabController(length: 4, vsync: this);
+    _controller.addListener(_handleTabSelection);
+  }
+
+  _handleTabSelection() {
+    if (_controller.indexIsChanging) {
+      setState(() {
+        _tabIndex = _controller.index;
+      });
+    }
   }
 
   @override
@@ -77,63 +94,49 @@ class _CardPpid1State extends State<CardPpid1>
   //https://stackoverflow.com/questions/54642710/tabbarview-with-dynamic-container-height
 
   Widget cardppid2() {
-    return SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        //scrollDirection: Axis.vertical,
-        color: Colors.yellow,
-        padding: new EdgeInsets.all(7.0),
+    return ListView(children: <Widget>[
+      Container(
         child: Column(
-          children: [
+          children: <Widget>[
+            // Container(
+            //   width: double.infinity,
+            //   height: 300,
+            //   color: Colors.yellow,
+            // ),
             logo(),
             cegnev(),
             helylist(),
             kedvencekhez(),
-            //tabbar5(),
+            // TabBar(
+            //   controller: _controller,
+            //   labelColor: Colors.redAccent,
+            //   tabs: myTabs,
+            // ),
             tabbar1(),
-            //tabbarview2(),
-            logo(),
+            tabbarview2(),
+            // Container(
+            //   child: [
+            //     Text('First tab'),
+            //     Column(
+            //       children: List.generate(40, (index) => Text('line: $index'))
+            //           .toList(),
+            //     ),
+            //     Column(
+            //       children: List.generate(60, (index) => Text('line: $index'))
+            //           .toList(),
+            //     ),
+            //     Column(
+            //       children: List.generate(20, (index) => Text('line: $index'))
+            //           .toList(),
+            //     ),
+            //   ][_tabIndex],
+            // ),
             cegnev(),
-            logo(),
-            cegnev(),
-            logo(),
-            cegnev(),
-            logo(),
-            cegnev(),
+            //Container(child: Text('another component')),
           ],
         ),
-        //     //width: MediaQuery.of(context).size.width,
-        //     // height: MediaQuery.of(context).size.height,
-        //     color: Colors.yellow,
-        //     child: Row(
-        //       crossAxisAlignment: CrossAxisAlignment.start,
-        //       //mainAxisSize: MainAxisSize.min,
-        //       //mainAxisAlignment: MainAxisAlignment.center,
-        //       children: [Expanded(
-        //         child: Column(
-        //           children: [
-        //             [
-        //               logo(),
-        //               cegnev(),
-        //               helylist(),
-        //               kedvencekhez(),
-        //               tabbar1(),
-        //               tabbarview1(),
-        //               // tabbarview2(),
-        //               // logo(),
-        //               // cegnev(),
-        //               // helylist(),
-        //               // logo(),
-        //               //cegnev(),
-        //               // helylist(),
-        //             ],
-        //           ],
-        //           ),
-        //           ),
-        // ],
-        //           ),
       ),
-    );
+    ]);
   }
 
   Widget logo() {
@@ -200,14 +203,21 @@ class _CardPpid1State extends State<CardPpid1>
     );
   }
 
-  Widget tabbar5() {
-    //return Text('sddaasd');
-    return Column(
-      children: [
-        //Text('sddaasd'),
-        tabbar1(),
-        tabbarview2(),
-      ],
+  Widget magunkrol() {
+    return Container(
+      padding: const EdgeInsets.all(10.0),
+      child: Center(
+        child: Text(
+          kiallito.magunkrol,
+          style: DefaultTextStyle.of(context).style.apply(
+                fontSizeFactor: 1,
+                fontWeightDelta: 1,
+                color: Colors.black,
+              ),
+          // style: TextStyle(
+          //     fontWeight: FontWeight.bold, fontSize: Font),
+        ),
+      ),
     );
   }
 
@@ -231,22 +241,46 @@ class _CardPpid1State extends State<CardPpid1>
             style: TextStyle(color: Colors.black),
           ),
         ),
+        Tab(
+          child: Text(
+            'Márkák',
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        Tab(
+          child: Text(
+            'Jegyzet',
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
       ],
     );
   }
 
   Widget tabbarview2() {
     return Container(
-      //height: 100,
-      child: TabBarView(
-        controller: _controller,
-        children: <Widget>[
-          Text('1'),
-          Text('2'),
-        ],
-      ),
+      child: [
+        magunkrol(),
+        logo(),
+        Column(
+          children: List.generate(60, (index) => Text('line: $index')).toList(),
+        ),
+        Column(
+          children: List.generate(20, (index) => Text('line: $index')).toList(),
+        ),
+      ][_tabIndex],
     );
   }
+
+  // Widget tabbarview3() {
+  //   return Container(
+  //     controller: _controller,
+  //     children: <Widget>[
+  //       Text('1'),
+  //       Text('2'),
+  //     ],
+  //   );
+  // }
 
   Widget tabbarview1() {
     return SingleChildScrollView(
