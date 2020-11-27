@@ -132,7 +132,7 @@ class _CardPpid2State extends State<CardPpid2>
             //   ][_tabIndex],
             // ),
             Text(
-                '.. és itt jön a folytatás, ami jól kapcsolódik, függ a felette lévők méretétől :-)'),
+                '.. és itt jön a folytatás, ami jól kapcsolódik, függ a felette lévők méretétől :-))))'),
             cegnev(),
             //Container(child: Text('another component')),
           ],
