@@ -54,7 +54,7 @@ Future<List<dynamic>> fetchKiallitok() async {
     // If the server did return a 200 OK response,
     // then parse the JSON.
     // return Kiallito.fromJson(jsonDecode(response.body))
-    print('response statuscode: ${response.statusCode}');
+    //print('response statuscode: ${response.statusCode}');
     Iterable list = jsonDecode(response.body);
 
     return list;

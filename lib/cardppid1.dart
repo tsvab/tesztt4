@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/widgets.dart';
 //import 'package:http/http.dart' as http;
 import 'kiallito1.dart';
 
@@ -10,23 +12,20 @@ class CardPpid1 extends StatefulWidget {
   CardPpid1({Key key, this.ppid}) : super(key: key);
 
   @override
-  _CardPpid1State createState() => _CardPpid1State(ppid);
+  _CardPpid1State createState() => _CardPpid1State();
 }
 
 class _CardPpid1State extends State<CardPpid1>
     with SingleTickerProviderStateMixin {
   TabController _controller;
 
-  String ppid;
   Kiallito kiallito;
-
-  _CardPpid1State(this.ppid); //constructor
 
   Future<bool> getKiallito(ppid) async {
     // Future<void> getKiallito() async {
     await fetchKiallito(ppid).then((value) {
       kiallito = value;
-      print('getKiallito kiallito: $kiallito');
+      // print('getKiallito kiallito: $kiallito');
     });
     return true;
   }
@@ -46,14 +45,15 @@ class _CardPpid1State extends State<CardPpid1>
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getKiallito(ppid),
+        future: getKiallito(widget.ppid),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           //print('kiallito: $kiallito');
           if (snapshot.hasData) {
             //return Text(kiallito.cegnev);
             return cardppid2();
           } else {
-            return Expanded(
+            //return Container();
+            return Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -73,29 +73,64 @@ class _CardPpid1State extends State<CardPpid1>
         });
   }
 
+  //https://stackoverflow.com/questions/54642710/tabbarview-with-dynamic-container-height
+
   Widget cardppid2() {
     return SingleChildScrollView(
       child: Container(
-        width: MediaQuery.of(context).size.width,
+        height: height: MediaQuery.of(context).size.height,
+        //scrollDirection: Axis.vertical,
         color: Colors.yellow,
+        padding: new EdgeInsets.all(7.0),
         child: Column(
-          //mainAxisSize: MainAxisSize.min,
-          //mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // logo(),
-            // cegnev(),
-            // helylist(),
-            // kedvencekhez(),
+          children: [
+            logo(),
+            cegnev(),
+            helylist(),
+            kedvencekhez(),
+            //tabbar5(),
             tabbar1(),
-            tabbarview2(),
-            // logo(),
-            // cegnev(),
-            // helylist(),
-            // logo(),
-            // cegnev(),
-            // helylist(),
+            //tabbarview2(),
+            logo(),
+            cegnev(),
+            logo(),
+            cegnev(),
+            logo(),
+            cegnev(),
+            logo(),
+            cegnev(),
           ],
         ),
+        //     //width: MediaQuery.of(context).size.width,
+        //     // height: MediaQuery.of(context).size.height,
+        //     color: Colors.yellow,
+        //     child: Row(
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       //mainAxisSize: MainAxisSize.min,
+        //       //mainAxisAlignment: MainAxisAlignment.center,
+        //       children: [Expanded(
+        //         child: Column(
+        //           children: [
+        //             [
+        //               logo(),
+        //               cegnev(),
+        //               helylist(),
+        //               kedvencekhez(),
+        //               tabbar1(),
+        //               tabbarview1(),
+        //               // tabbarview2(),
+        //               // logo(),
+        //               // cegnev(),
+        //               // helylist(),
+        //               // logo(),
+        //               //cegnev(),
+        //               // helylist(),
+        //             ],
+        //           ],
+        //           ),
+        //           ),
+        // ],
+        //           ),
       ),
     );
   }
@@ -164,6 +199,17 @@ class _CardPpid1State extends State<CardPpid1>
     );
   }
 
+  Widget tabbar5() {
+    //return Text('sddaasd');
+    return Column(
+      children: [
+        //Text('sddaasd'),
+        tabbar1(),
+        tabbarview2(),
+      ],
+    );
+  }
+
   Widget tabbar1() {
     return TabBar(
       controller: _controller,
@@ -189,18 +235,20 @@ class _CardPpid1State extends State<CardPpid1>
   }
 
   Widget tabbarview2() {
-    return TabBarView(
-      controller: _controller,
-      children: <Widget>[
-        Text('1'),
-        Text('2'),
-      ],
+    return Container(
+      //height: 100,
+      child: TabBarView(
+        controller: _controller,
+        children: <Widget>[
+          Text('1'),
+          Text('2'),
+        ],
+      ),
     );
   }
 
   Widget tabbarview1() {
-    return Container(
-      height: 400.0,
+    return SingleChildScrollView(
       child: TabBarView(
         controller: _controller,
         children: <Widget>[

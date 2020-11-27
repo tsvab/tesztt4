@@ -21,7 +21,7 @@ class _List2State extends State<List2> {
     // Future<void> getKiallito() async {
     await fetchKiallitok().then((value) {
       _elements = value;
-      print(_elements);
+      //(_elements);
     });
     return true;
   }

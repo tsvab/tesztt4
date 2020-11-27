@@ -51,7 +51,7 @@ class ListCard1 extends StatelessWidget {
           ),
           title: Text(cegnev),
           //trailing: Icon(Icons.arrow_forward),
-          // subtitle: Text(ppid),
+          //subtitle: Text(ppid),
         ),
       ),
     );
