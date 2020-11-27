@@ -131,6 +131,8 @@ class _CardPpid2State extends State<CardPpid2>
             //     ),
             //   ][_tabIndex],
             // ),
+            Text(
+                '.. és itt jön a folytatás, ami jól kapcsolódik, függ a felette lévők méretétől :-)'),
             cegnev(),
             //Container(child: Text('another component')),
           ],
@@ -153,7 +155,7 @@ class _CardPpid2State extends State<CardPpid2>
                 ),
         ),
         constraints: BoxConstraints(
-            minHeight: 20,
+            minHeight: 0,
             // minWidth: double.infinity,
             // maxWidth: 300,
             maxHeight: 150),
@@ -261,12 +263,15 @@ class _CardPpid2State extends State<CardPpid2>
     return Container(
       child: [
         magunkrol(),
-        logo(),
+        cegnev(),
         Column(
-          children: List.generate(60, (index) => Text('line: $index')).toList(),
+          children:
+              List.generate(10, (index) => Text('blabla: $index')).toList(),
         ),
         Column(
-          children: List.generate(20, (index) => Text('line: $index')).toList(),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children:
+              List.generate(20, (index) => Text('blabla: $index')).toList(),
         ),
       ][_tabIndex],
     );
