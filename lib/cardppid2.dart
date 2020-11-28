@@ -226,11 +226,12 @@ class _CardPpid2State extends State<CardPpid2>
   Widget tabbar1() {
     return TabBar(
       controller: _controller,
+      isScrollable: true,
       tabs: [
         Tab(
           child: Text(
             'Leírás',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.black, fontSize: 30),
           ),
           // icon: Icon(
           //   Icons.star,
@@ -240,19 +241,19 @@ class _CardPpid2State extends State<CardPpid2>
         Tab(
           child: Text(
             'Kuponok',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.black, fontSize: 30),
           ),
         ),
         Tab(
           child: Text(
             'Márkák',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.black, fontSize: 30),
           ),
         ),
         Tab(
           child: Text(
             'Jegyzet',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.black, fontSize: 30),
           ),
         ),
       ],
