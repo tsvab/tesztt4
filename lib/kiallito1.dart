@@ -1,6 +1,7 @@
-import 'package:http/http.dart' as http;
 //import 'dart:async';
 import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 
 class Kiallito {
   final String ppid;
@@ -8,6 +9,11 @@ class Kiallito {
   final String urllogo;
   final List standlista;
   final String magunkrol;
+  final String kapcsolat;
+  final String email;
+  final String web;
+  final List kategorialista;
+  final List markalista;
   final bool favourite;
 
   Kiallito(
@@ -16,6 +22,11 @@ class Kiallito {
       this.urllogo = '',
       this.standlista,
       this.magunkrol = '',
+      this.kapcsolat = '',
+      this.email = '',
+      this.web = '',
+      this.kategorialista,
+      this.markalista,
       this.favourite = false});
 
   String get helylist {
@@ -30,6 +41,28 @@ class Kiallito {
     return ret;
   }
 
+  String get katagorialist {
+    String ret = '';
+    this.kategorialista.forEach((element) {
+      if (ret != '') {
+        ret += '\n';
+      }
+      ret += element['nev'];
+    });
+    return ret;
+  }
+
+  String get markalist {
+    String ret = '';
+    this.markalista.forEach((element) {
+      if (ret != '') {
+        ret += '\n';
+      }
+      ret += element['nev1'];
+    });
+    return ret;
+  }
+
   factory Kiallito.fromJson(Map<String, dynamic> json) {
     return Kiallito(
       ppid: json['ppid'],
@@ -37,12 +70,17 @@ class Kiallito {
       urllogo: json['urllogo'],
       standlista: json['standlista'] ?? [],
       magunkrol: json['magunkrol'] ?? '',
+      kapcsolat: json['kapcsolat'] ?? '',
+      email: json['email'] ?? '',
+      web: json['web'] ?? '',
+      kategorialista: json['kategorialista'] ?? '',
+      markalista: json['markalista'] ?? '',
     );
   }
 
   @override
   String toString() =>
-      '$runtimeType(${this.ppid}, \"${this.cegnev}\", \"${this.urllogo}\", \"${this.standlista}\")';
+      '$runtimeType(${this.ppid}, \"${this.cegnev}\", \"${this.urllogo}\", \"${this.standlista}\, \"${this.kapcsolat}\", \"${this.markalista}\")';
 }
 
 Future<List<dynamic>> fetchKiallitok() async {

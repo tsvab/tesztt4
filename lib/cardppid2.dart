@@ -21,14 +21,10 @@ class _CardPpid2State extends State<CardPpid2>
   TabController _controller;
   int _tabIndex = 0;
 
-  final List<Widget> myTabs = [
-    Tab(text: 'one'),
-    Tab(text: 'two'),
-    Tab(text: 'three'),
-    Tab(text: 'four'),
-  ];
-
   Kiallito kiallito;
+
+  TextStyle _textStylePlain;
+  TextStyle _textStyleHeading;
 
   Future<bool> getKiallito(ppid) async {
     // Future<void> getKiallito() async {
@@ -62,6 +58,17 @@ class _CardPpid2State extends State<CardPpid2>
 
   @override
   Widget build(BuildContext context) {
+    _textStyleHeading = DefaultTextStyle.of(context).style.apply(
+          fontSizeFactor: 1.5,
+          fontWeightDelta: 2,
+          color: Colors.black,
+        );
+
+    _textStylePlain = DefaultTextStyle.of(context).style.apply(
+          fontSizeFactor: 1,
+          fontWeightDelta: 1,
+          color: Colors.black,
+        );
     return FutureBuilder(
         future: getKiallito(widget.ppid),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -114,26 +121,10 @@ class _CardPpid2State extends State<CardPpid2>
             // ),
             tabbar1(),
             tabbarview2(),
-            // Container(
-            //   child: [
-            //     Text('First tab'),
-            //     Column(
-            //       children: List.generate(40, (index) => Text('line: $index'))
-            //           .toList(),
-            //     ),
-            //     Column(
-            //       children: List.generate(60, (index) => Text('line: $index'))
-            //           .toList(),
-            //     ),
-            //     Column(
-            //       children: List.generate(20, (index) => Text('line: $index'))
-            //           .toList(),
-            //     ),
-            //   ][_tabIndex],
-            // ),
+
             Text(
                 '.. és itt jön a folytatás, ami jól kapcsolódik, függ a felette lévők méretétől :-))))'),
-            cegnev(),
+            //cegnev(),
             //Container(child: Text('another component')),
           ],
         ),
@@ -147,11 +138,14 @@ class _CardPpid2State extends State<CardPpid2>
         child: SizedBox(
           child: kiallito.urllogo == ''
               ? Container()
-              : CachedNetworkImage(
-                  imageUrl: kiallito.urllogo,
-                  placeholder: (context, url) => Container(),
-                  //errorWidget: (context, url, error) => Icon(Icons.error),
-                  //width: 300,
+              : Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CachedNetworkImage(
+                    imageUrl: kiallito.urllogo,
+                    placeholder: (context, url) => Container(),
+                    //errorWidget: (context, url, error) => Icon(Icons.error),
+                    //width: 300,
+                  ),
                 ),
         ),
         constraints: BoxConstraints(
@@ -169,14 +163,22 @@ class _CardPpid2State extends State<CardPpid2>
       // width: 100,
       // height: 50,
       //color: Colors.amber[600],
-      child: Center(
-        child: Text(
-          kiallito.cegnev,
-          style: DefaultTextStyle.of(context).style.apply(
-              fontSizeFactor: 1.5, fontWeightDelta: 2, color: Colors.black),
-          // style: TextStyle(
-          //     fontWeight: FontWeight.bold, fontSize: Font),
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(
+            child: Text(
+              kiallito.cegnev,
+              maxLines: 2,
+              softWrap: true,
+              //overflow: TextOverflow.fade,
+              style: DefaultTextStyle.of(context).style.apply(
+                  fontSizeFactor: 1.6, fontWeightDelta: 2, color: Colors.black),
+              // style: TextStyle(
+              //     fontWeight: FontWeight.bold, fontSize: Font),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -189,8 +191,9 @@ class _CardPpid2State extends State<CardPpid2>
       child: Center(
         child: Text(
           kiallito.helylist,
-          style: DefaultTextStyle.of(context).style.apply(
-              fontSizeFactor: 1, fontWeightDelta: 2, color: Colors.black),
+          style: _textStylePlain,
+          // style: DefaultTextStyle.of(context).style.apply(
+          //     fontSizeFactor: 1, fontWeightDelta: 2, color: Colors.black),
           // style: TextStyle(
           //     fontWeight: FontWeight.bold, fontSize: Font),
         ),
@@ -208,17 +211,256 @@ class _CardPpid2State extends State<CardPpid2>
   Widget magunkrol() {
     return Container(
       padding: const EdgeInsets.all(10.0),
-      child: Center(
-        child: Text(
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+          child: Text(
+            "Rólunk",
+            style: _textStyleHeading,
+          ),
+        ),
+        Text(
           kiallito.magunkrol,
-          style: DefaultTextStyle.of(context).style.apply(
-                fontSizeFactor: 1,
-                fontWeightDelta: 1,
-                color: Colors.black,
-              ),
+          style: _textStylePlain,
+          // style: DefaultTextStyle.of(context).style.apply(
+          //       fontSizeFactor: 1,
+          //       fontWeightDelta: 1,
+          //       color: Colors.black,
+          //     ),
           // style: TextStyle(
           //     fontWeight: FontWeight.bold, fontSize: Font),
         ),
+      ]),
+    );
+  }
+
+  Widget terkep() {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+            child: Text(
+              'Hol talál meg minket?',
+              style: _textStyleHeading,
+            ),
+          ),
+          Image.network(
+              'https://eregistrator.hu/upload/profil1/0015837634573.jpg'),
+        ],
+      ),
+    );
+  }
+
+  Widget info() {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+            child: Text(
+              "További információk",
+              style: _textStyleHeading,
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ListTile(
+                leading: Icon(Icons.widgets_outlined),
+                title: Text(
+                  kiallito.katagorialist,
+                  style: _textStylePlain,
+                ),
+              ),
+            ],
+          ),
+          ListTile(
+            leading: Icon(Icons.mail),
+            title: Text(
+              kiallito.email,
+              style: _textStylePlain,
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.web_asset),
+            title: Text(
+              kiallito.web,
+              style: _textStylePlain,
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ListTile(
+                leading: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.location_pin),
+                  ],
+                ),
+                title: Text(
+                  kiallito.kapcsolat,
+                  style: _textStylePlain,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget markak1() {
+    return Container(
+      color: Colors.yellow,
+      height: 120,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: kiallito.markalista.length,
+        // itemCount: 5,
+        itemBuilder: (c, index) {
+          //return Text('AAAAAB ');
+          return Padding(
+            padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+            child: Container(
+              height: 120,
+              width: 150,
+
+              decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: Colors.red,
+                  )),
+              //color: Colors.blue,
+              child: Column(
+                children: [
+                  ListTile(
+                    horizontalTitleGap: 10,
+                    // leading: CircleAvatar(
+                    //   child: Text('CA'),
+                    // ),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        //Text(kiallito.markalista[index]['urllogomarka']),
+                        Container(
+                          height: 80,
+                          child: kiallito.markalista[index]['urllogomarka'] ==
+                                  ''
+                              ? Container()
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CachedNetworkImage(
+                                    imageUrl: kiallito.markalista[index]
+                                        ['urllogomarka'],
+                                    placeholder: (context, url) => Container(),
+                                    //errorWidget: (context, url, error) => Icon(Icons.error),
+                                    //width: 300,
+                                  ),
+                                ),
+                        ),
+                      ],
+                    ),
+                    subtitle: Center(
+                      child: Text(
+                        //'asdasd $i',
+                        kiallito.markalista[index]['nev1'],
+                        style: TextStyle(fontSize: 10),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+
+    // return Container(
+    //     height: 50,
+    //     color: Colors.yellow,
+    //     child: ListView.builder(
+    //       //scrollDirection: Axis.horizontal,
+    //       itemCount: 5,
+    //       itemBuilder: (c, i) {
+    //         return Column(
+    //           // height: 30,
+    //           // width: 30,
+    //           // decoration: BoxDecoration(
+    //           //     border: Border.all(
+    //           //         //color: Colors.black,
+    //           //         )),
+    //           //color: Colors.blue,
+    //           children: [
+    //             ListTile(
+    //               //horizontalTitleGap: 10,
+    //               title: Text(
+    //                 'SSS',
+    //                 style: TextStyle(color: Colors.green),
+    //               ),
+    //             ),
+    //           ],
+    //         );
+    //       },
+    //     ));
+
+    // return Container(
+    //   //height: 100,
+    //   child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+    //     ListView.builder(
+    //       scrollDirection: Axis.horizontal,
+    //       itemCount: 3,
+    //       itemBuilder: (c, index) {
+    //         return Container(
+    //           height: 50,
+    //           width: 50,
+    //           color: Colors.yellow,
+    //           // child: Text('wefwefqwf')
+    //         );
+    //       },
+    //     )
+    //   ]),
+    // );
+
+    //   return ListView.builder(
+    //     scrollDirection: Axis.horizontal,
+    //     itemCount: 3,
+    //     itemBuilder: (BuildContext ctxt, int index) {
+    //       return Container(
+    //         width: 80,
+    //         height: 80,
+    //         child: ListTile(
+    //           horizontalTitleGap: 5,
+    //
+    //           title: Text('asadsasd'),
+    //         ),
+    //       );
+    //     },
+    //   // );
+  }
+
+  Widget marka() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+            child: Text(
+              "Forgalmazott márkák",
+              style: _textStyleHeading,
+            ),
+          ),
+          markak1(),
+          //Text('Márka vége QQQQQQQQQQQQQQ'),
+        ],
       ),
     );
   }
@@ -231,7 +473,7 @@ class _CardPpid2State extends State<CardPpid2>
         Tab(
           child: Text(
             'Leírás',
-            style: TextStyle(color: Colors.black, fontSize: 30),
+            style: TextStyle(color: Colors.black, fontSize: 20),
           ),
           // icon: Icon(
           //   Icons.star,
@@ -241,19 +483,19 @@ class _CardPpid2State extends State<CardPpid2>
         Tab(
           child: Text(
             'Kuponok',
-            style: TextStyle(color: Colors.black, fontSize: 30),
+            style: TextStyle(color: Colors.black, fontSize: 20),
           ),
         ),
         Tab(
           child: Text(
-            'Márkák',
-            style: TextStyle(color: Colors.black, fontSize: 30),
+            'Újdonságok',
+            style: TextStyle(color: Colors.black, fontSize: 20),
           ),
         ),
         Tab(
           child: Text(
             'Jegyzet',
-            style: TextStyle(color: Colors.black, fontSize: 30),
+            style: TextStyle(color: Colors.black, fontSize: 20),
           ),
         ),
       ],
@@ -263,8 +505,29 @@ class _CardPpid2State extends State<CardPpid2>
   Widget tabbarview2() {
     return Container(
       child: [
-        magunkrol(),
-        cegnev(),
+        Column(
+          children: [
+            magunkrol(),
+            Divider(
+              color: Theme.of(context).primaryColor,
+            ),
+            terkep(),
+            Divider(
+              color: Theme.of(context).primaryColor,
+            ),
+            info(),
+            Divider(
+              color: Theme.of(context).primaryColor,
+            ),
+            marka(),
+            Divider(
+              color: Theme.of(context).primaryColor,
+            ),
+          ],
+        ),
+        //      children:
+        // ),
+        //Text('első alatt'),
         Column(
           children:
               List.generate(10, (index) => Text('blabla: $index')).toList(),
@@ -274,6 +537,7 @@ class _CardPpid2State extends State<CardPpid2>
           children:
               List.generate(20, (index) => Text('blabla: $index')).toList(),
         ),
+        Text('utolsó'),
       ][_tabIndex],
     );
   }
@@ -288,63 +552,53 @@ class _CardPpid2State extends State<CardPpid2>
   //   );
   // }
 
-  Widget tabbarview1() {
-    return SingleChildScrollView(
-      child: TabBarView(
-        controller: _controller,
-        children: <Widget>[
-          Container(
-            // width: 100,
-            // height: 50,
-            //color: Colors.amber[600],
-            child: Column(
-              children: [
-                Text(
-                  'Rólunk',
-                  style: DefaultTextStyle.of(context).style.apply(
-                        fontSizeFactor: 1.5,
-                        fontWeightDelta: 2,
-                        color: Colors.black,
-                      ),
-                  textAlign: TextAlign.left,
-                  // style: TextStyle(
-                  //     fontWeight: FontWeight.bold, fontSize: Font),
-                ),
-                Container(
-                  // width: 100,
-                  // height: 50,
-                  //color: Colors.amber[600],
-                  padding: const EdgeInsets.all(10.0),
-                  child: Center(
-                    child: Text(
-                      kiallito.magunkrol,
-                      style: DefaultTextStyle.of(context).style.apply(
-                            fontSizeFactor: 1,
-                            fontWeightDelta: 1,
-                            color: Colors.black,
-                          ),
-                      // style: TextStyle(
-                      //     fontWeight: FontWeight.bold, fontSize: Font),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-          ),
-          Container(
-            height: 70,
-            child: Card(
-              child: ListTile(
-                leading: const Icon(Icons.location_on),
-                title: Text('Latitude: 48.09342\nLongitude: 11.23403'),
-                trailing: IconButton(
-                    icon: const Icon(Icons.my_location), onPressed: () {}),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+//   Widget tabbarview1() {
+//     return SingleChildScrollView(
+//       child: TabBarView(
+//         controller: _controller,
+//         children: <Widget>[
+//           Container(
+//             // width: 100,
+//             // height: 50,
+//             //color: Colors.amber[600],
+//             child: Column(
+//               children: [
+//                 Text(
+//                   'Rólunk',
+//                   style: _textStyleHeading,
+//                   textAlign: TextAlign.left,
+//                   // style: TextStyle(
+//                   //     fontWeight: FontWeight.bold, fontSize: Font),
+//                 ),
+//                 Container(
+//                   // width: 100,
+//                   // height: 50,
+//                   //color: Colors.amber[600],
+//                   padding: const EdgeInsets.all(10.0),
+//                   child: Center(
+//                     child: Text(
+//                       kiallito.magunkrol,
+//                       style: _textStylePlain,
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//             padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+//           ),
+//           Container(
+//             height: 70,
+//             child: Card(
+//               child: ListTile(
+//                 leading: const Icon(Icons.location_on),
+//                 title: Text('Latitude: 48.09342\nLongitude: 11.23403'),
+//                 trailing: IconButton(
+//                     icon: const Icon(Icons.my_location), onPressed: () {}),
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
 }
