@@ -317,8 +317,8 @@ class _CardPpid2State extends State<CardPpid2>
 
   Widget markak1() {
     return Container(
-      color: Colors.yellow,
-      height: 120,
+      //color: Colors.yellow,
+      height: 150,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: kiallito.markalista.length,
@@ -326,17 +326,17 @@ class _CardPpid2State extends State<CardPpid2>
         itemBuilder: (c, index) {
           //return Text('AAAAAB ');
           return Padding(
-            padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+            padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
             child: Container(
-              height: 120,
+              height: 150,
               width: 150,
 
               decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: Colors.red,
-                  )),
+                      //color: Colors.red,
+                      )),
               //color: Colors.blue,
               child: Column(
                 children: [
@@ -350,7 +350,7 @@ class _CardPpid2State extends State<CardPpid2>
                       children: [
                         //Text(kiallito.markalista[index]['urllogomarka']),
                         Container(
-                          height: 80,
+                          height: 100,
                           child: kiallito.markalista[index]['urllogomarka'] ==
                                   ''
                               ? Container()
@@ -371,7 +371,7 @@ class _CardPpid2State extends State<CardPpid2>
                       child: Text(
                         //'asdasd $i',
                         kiallito.markalista[index]['nev1'],
-                        style: TextStyle(fontSize: 10),
+                        style: TextStyle(fontSize: 10, color: Colors.black),
                       ),
                     ),
                   ),
@@ -448,6 +448,7 @@ class _CardPpid2State extends State<CardPpid2>
 
   Widget marka() {
     return Container(
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
