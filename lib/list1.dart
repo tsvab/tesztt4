@@ -7,6 +7,10 @@ import 'kiallito1.dart';
 import 'listcard1.dart';
 
 class List1 extends StatefulWidget {
+  final String prid;
+  final String searchmode;
+  List1({this.prid, this.searchmode});
+
   @override
   _List1State createState() => _List1State();
 }
@@ -19,7 +23,7 @@ class _List1State extends State<List1> {
   TextEditingController searchController = TextEditingController();
 
   Future<bool> getKiallitok() async {
-    await fetchKiallitok().then((value) {
+    await fetchKiallitok(widget.prid, widget.searchmode).then((value) {
       print(value.length);
       value.forEach((element) {
         kiallitoList.add(Kiallito(

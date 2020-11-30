@@ -7,9 +7,10 @@ import 'kiallito1.dart';
 import 'listcard1.dart';
 
 class List2 extends StatefulWidget {
-  //FutureMap<String, dynamic> _elements ;
+  final String prid;
+  final String searchmode;
+  List2({this.prid, this.searchmode});
 
-  //List<Kiallito> _elements = [] ;
   @override
   _List2State createState() => _List2State();
 }
@@ -19,7 +20,7 @@ class _List2State extends State<List2> {
 
   Future<bool> getKiallitok() async {
     // Future<void> getKiallito() async {
-    await fetchKiallitok().then((value) {
+    await fetchKiallitok(widget.prid, widget.searchmode).then((value) {
       _elements = value;
       //(_elements);
     });

@@ -83,9 +83,16 @@ class Kiallito {
       '$runtimeType(${this.ppid}, \"${this.cegnev}\", \"${this.urllogo}\", \"${this.standlista}\, \"${this.kapcsolat}\", \"${this.markalista}\")';
 }
 
-Future<List<dynamic>> fetchKiallitok() async {
-  final String url =
-      "https://eregistrator.hu/6/index.php?r=kialllista/kialllista1/list&pridlist=CSA19&orgid=00158376&lngid=hu&pagesize=50&mode=K&up=1&upevent=ipar-napjai&app=1";
+Future<List<dynamic>> fetchKiallitok(String prid, String searchmode) async {
+  String url;
+  if (searchmode == 'P') {
+    url =
+        "https://eregistrator.hu/6/index.php?r=kialllista/kialllista1/list&pridlist=$prid&orgid=00158376&lngid=hu&pagesize=50&mode=K&up=1&upevent=ipar-napjai&app=1";
+  } else {
+    url =
+        "https://eregistrator.hu/6/index.php?r=kialllista/kialllista1/list&pridlist=$prid&orgid=00158376&lngid=hu&pagesize=50&mode=K&up=1&upevent=ipar-napjai&app=1";
+  }
+
   final response = await http.get(url);
 
   if (response.statusCode == 200) {

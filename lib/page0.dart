@@ -42,7 +42,9 @@ class Page0 extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Page1()),
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Page1(prid: 'IND20', searchmode: 'P')),
                         );
                       },
                     ),

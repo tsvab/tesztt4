@@ -4,8 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 //import 'package:http/http.dart' as http;
+import 'calendarmodal1.dart';
+import 'calendarmodalcupertino1.dart';
 import 'kiallito1.dart';
 
 class CardPpid2 extends StatefulWidget {
@@ -150,6 +153,7 @@ class _CardPpid2State extends State<CardPpid2>
   }
 
   Widget logo() {
+    /// TODO Hero
     return Center(
       child: Container(
         child: SizedBox(
@@ -512,6 +516,38 @@ class _CardPpid2State extends State<CardPpid2>
     );
   }
 
+  Widget calendar1() {
+    /// TODO x close button
+    return Column(
+      children: [
+        RaisedButton(
+          child: Text('Foglalás Cupertino'),
+          onPressed: () {
+            return showCupertinoModalBottomSheet(
+              expand: false,
+              enableDrag: false,
+              context: context,
+              backgroundColor: Colors.transparent,
+              builder: (context) => CalendarModalCupertino1(),
+            );
+          },
+        ),
+        RaisedButton(
+          child: Text('Foglalás'),
+          onPressed: () {
+            return showMaterialModalBottomSheet(
+              expand: false,
+              enableDrag: false,
+              context: context,
+              backgroundColor: Colors.transparent,
+              builder: (context) => CalendarModal1(),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
   Widget tab1() {
     return Column(children: [
       tabbar1(),
@@ -606,6 +642,7 @@ class _CardPpid2State extends State<CardPpid2>
           Text('kuponok'),
           Text('újdonság'),
           Text('jegyzet'),
+          Text('időpont foglalás'),
         ],
       ),
     );
@@ -643,7 +680,7 @@ class _CardPpid2State extends State<CardPpid2>
               List.generate(20, (index) => Text('blabla: $index')).toList(),
         ),
         Text('jegyzet'),
-        Text('időpont foglalás'),
+        calendar1(),
       ][_tabIndex],
     );
   }
