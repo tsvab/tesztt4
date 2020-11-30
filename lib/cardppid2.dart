@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -38,16 +39,17 @@ class _CardPpid2State extends State<CardPpid2>
   @override
   void initState() {
     super.initState();
-    _controller = TabController(length: 4, vsync: this);
+    _controller = TabController(length: 5, vsync: this);
     _controller.addListener(_handleTabSelection);
   }
 
   _handleTabSelection() {
-    if (_controller.indexIsChanging) {
-      setState(() {
-        _tabIndex = _controller.index;
-      });
-    }
+    print('_controller.index: ${_controller.index}');
+    //if (_controller.indexIsChanging) {
+    setState(() {
+      _tabIndex = _controller.index;
+    });
+    //}
   }
 
   @override
@@ -101,33 +103,50 @@ class _CardPpid2State extends State<CardPpid2>
   //https://stackoverflow.com/questions/54642710/tabbarview-with-dynamic-container-height
 
   Widget cardppid2() {
-    return ListView(children: <Widget>[
-      Column(
-        children: <Widget>[
-          // Container(
-          //   width: double.infinity,
-          //   height: 300,
-          //   color: Colors.yellow,
-          // ),
-          logo(),
-          cegnev(),
-          helylist(),
-          kedvencekhez(),
-          // TabBar(
-          //   controller: _controller,
-          //   labelColor: Colors.redAccent,
-          //   tabs: myTabs,
-          // ),
-          tabbar1(),
-          tabbarview2(),
+    return GestureDetector(
+      onHorizontalDragEnd: (dragEndDetails) {
+        if (dragEndDetails.primaryVelocity < 0) {
+          if (_controller.index < _controller.length - 1) {
+            _controller.index += 1;
+          }
+        } else if (dragEndDetails.primaryVelocity > 0) {
+          if (_controller.index > 0) {
+            _controller.index -= 1;
+          }
+        }
+      },
+      child: ListView(children: <Widget>[
+        Column(
+          children: <Widget>[
+            // Container(
+            //   width: double.infinity,
+            //   height: 300,
+            //   color: Colors.yellow,
+            // ),
+            logo(),
+            cegnev(),
+            helylist(),
+            kedvencekhez(),
+            // TabBar(
+            //   controller: _controller,
+            //   labelColor: Colors.redAccent,
+            //   tabs: myTabs,
+            // ),
 
-          // Text(
-          //     '.. és itt jön a folytatás, ami jól kapcsolódik, függ a felette lévők méretétől :-))))'),
-          //cegnev(),
-          //Container(child: Text('another component')),
-        ],
-      ),
-    ]);
+            tab1(),
+            // tabbar1(),
+            // tabbarview2(),
+
+            //tab2(),
+
+            Text(
+                '.. és itt jön a folytatás, ami jól kapcsolódik, függ a felette lévők méretétől :-))))'),
+            //cegnev(),
+            //Container(child: Text('another component')),
+          ],
+        ),
+      ]),
+    );
   }
 
   Widget logo() {
@@ -165,15 +184,24 @@ class _CardPpid2State extends State<CardPpid2>
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Center(
-            child: Text(
-              kiallito.cegnev,
-              maxLines: 2,
-              softWrap: true,
-              //overflow: TextOverflow.fade,
-              style: DefaultTextStyle.of(context).style.apply(
-                  fontSizeFactor: 1.6, fontWeightDelta: 2, color: Colors.black),
-              // style: TextStyle(
-              //     fontWeight: FontWeight.bold, fontSize: Font),
+            /// DONE hosszú cégnév több sorba törik
+            child: FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  kiallito.cegnev,
+                  maxLines: 2,
+                  softWrap: true,
+                  //overflow: TextOverflow.fade,
+                  style: DefaultTextStyle.of(context).style.apply(
+                      fontSizeFactor: 1.5,
+                      fontWeightDelta: 2,
+                      color: Colors.black),
+                  // style: TextStyle(
+                  //     fontWeight: FontWeight.bold, fontSize: Font),
+                ),
+              ),
             ),
           ),
         ],
@@ -202,7 +230,22 @@ class _CardPpid2State extends State<CardPpid2>
   Widget kedvencekhez() {
     return RaisedButton(
       child: Text('Kedvencekhez'),
-      onPressed: () {},
+      onPressed: () {
+        final snackBar = SnackBar(
+          content: Text('Hozzáadva a kedvencekhez!'),
+          // action: SnackBarAction(
+          //   label: 'Undo',
+          //   onPressed: () {
+          //     // Some code to undo the change.
+          //   },
+          // ),
+          duration: Duration(seconds: 2),
+        );
+
+        // Find the Scaffold in the widget tree and use
+        // it to show a SnackBar.
+        Scaffold.of(context).showSnackBar(snackBar);
+      },
     );
   }
 
@@ -217,16 +260,18 @@ class _CardPpid2State extends State<CardPpid2>
             style: _textStyleHeading,
           ),
         ),
-        Text(
+        // Text(
+        //   kiallito.magunkrol,
+        //   style: _textStylePlain,
+        //
+        //   /// DONE text justify
+        //   textAlign: TextAlign.justify,
+        // ),
+        ExpandText(
           kiallito.magunkrol,
-          style: _textStylePlain,
-          // style: DefaultTextStyle.of(context).style.apply(
-          //       fontSizeFactor: 1,
-          //       fontWeightDelta: 1,
-          //       color: Colors.black,
-          //     ),
-          // style: TextStyle(
-          //     fontWeight: FontWeight.bold, fontSize: Font),
+          textAlign: TextAlign.justify,
+          maxLines: 3,
+          expandOnGesture: false,
         ),
       ]),
     );
@@ -324,8 +369,9 @@ class _CardPpid2State extends State<CardPpid2>
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: kiallito.markalista.length,
-        // itemCount: 5,
+        //itemCount: 5,
         itemBuilder: (c, index) {
+          //index = 0;
           //return Text('AAAAAB ');
           return Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
@@ -466,6 +512,23 @@ class _CardPpid2State extends State<CardPpid2>
     );
   }
 
+  Widget tab1() {
+    return Column(children: [
+      tabbar1(),
+      tabbarview2(),
+    ]);
+  }
+
+  // Widget tab2() {
+  //   return DefaultTabController(
+  //     length: 4,
+  //     child: Column(children: [
+  //       tabbar1(),
+  //       tabbarview3(),
+  //     ]),
+  //   );
+  // }
+
   Widget tabbar1() {
     return TabBar(
       controller: _controller,
@@ -499,7 +562,52 @@ class _CardPpid2State extends State<CardPpid2>
             style: TextStyle(color: Colors.black, fontSize: 20),
           ),
         ),
+        Tab(
+          child: Text(
+            'Időpont foglalás',
+            style: TextStyle(color: Colors.black, fontSize: 20),
+          ),
+        ),
       ],
+    );
+  }
+
+  Widget tabbarview3() {
+    return Expanded(
+      //height: 400,
+      child: TabBarView(
+        children: [
+          Container(
+            child: Column(
+              children: [
+                magunkrol(),
+                Divider(
+                  color: Theme.of(context).primaryColor,
+                ),
+                terkep(),
+                Divider(
+                  color: Theme.of(context).primaryColor,
+                ),
+                info(),
+                Divider(
+                  color: Theme.of(context).primaryColor,
+                ),
+                marka(),
+                Divider(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ],
+            ),
+          ),
+          // Container(height: 100, child: Text('rólunk')),
+          // Container(height: 100, child: Text('rólunk')),
+          // Container(height: 100, child: Text('rólunk')),
+          // Container(height: 100, child: Text('rólunk')),
+          Text('kuponok'),
+          Text('újdonság'),
+          Text('jegyzet'),
+        ],
+      ),
     );
   }
 
@@ -529,16 +637,13 @@ class _CardPpid2State extends State<CardPpid2>
         //      children:
         // ),
         Text('kuponok'),
-        // Column(
-        //   children:
-        //       List.generate(10, (index) => Text('blabla: $index')).toList(),
-        // ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children:
               List.generate(20, (index) => Text('blabla: $index')).toList(),
         ),
-        Text('utolsó'),
+        Text('jegyzet'),
+        Text('időpont foglalás'),
       ][_tabIndex],
     );
   }
