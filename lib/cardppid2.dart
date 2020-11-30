@@ -47,7 +47,7 @@ class _CardPpid2State extends State<CardPpid2>
   }
 
   _handleTabSelection() {
-    print('_controller.index: ${_controller.index}');
+    //print('_controller.index: ${_controller.index}');
     //if (_controller.indexIsChanging) {
     setState(() {
       _tabIndex = _controller.index;
