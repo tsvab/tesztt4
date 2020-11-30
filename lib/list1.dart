@@ -27,6 +27,8 @@ class _List1State extends State<List1> {
             cegnev: element['cegnev'],
             urllogo: element['urllogo']));
       });
+
+      /// TODO: latin2 sort saját
       kiallitoList.sort(
           (a, b) => a.cegnev.toLowerCase().compareTo(b.cegnev.toLowerCase()));
     });

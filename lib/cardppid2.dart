@@ -102,32 +102,30 @@ class _CardPpid2State extends State<CardPpid2>
 
   Widget cardppid2() {
     return ListView(children: <Widget>[
-      Container(
-        child: Column(
-          children: <Widget>[
-            // Container(
-            //   width: double.infinity,
-            //   height: 300,
-            //   color: Colors.yellow,
-            // ),
-            logo(),
-            cegnev(),
-            helylist(),
-            kedvencekhez(),
-            // TabBar(
-            //   controller: _controller,
-            //   labelColor: Colors.redAccent,
-            //   tabs: myTabs,
-            // ),
-            tabbar1(),
-            tabbarview2(),
+      Column(
+        children: <Widget>[
+          // Container(
+          //   width: double.infinity,
+          //   height: 300,
+          //   color: Colors.yellow,
+          // ),
+          logo(),
+          cegnev(),
+          helylist(),
+          kedvencekhez(),
+          // TabBar(
+          //   controller: _controller,
+          //   labelColor: Colors.redAccent,
+          //   tabs: myTabs,
+          // ),
+          tabbar1(),
+          tabbarview2(),
 
-            Text(
-                '.. és itt jön a folytatás, ami jól kapcsolódik, függ a felette lévők méretétől :-))))'),
-            //cegnev(),
-            //Container(child: Text('another component')),
-          ],
-        ),
+          // Text(
+          //     '.. és itt jön a folytatás, ami jól kapcsolódik, függ a felette lévők méretétől :-))))'),
+          //cegnev(),
+          //Container(child: Text('another component')),
+        ],
       ),
     ]);
   }
@@ -235,6 +233,7 @@ class _CardPpid2State extends State<CardPpid2>
   }
 
   Widget terkep() {
+    /// TODO itt áll ön külön layer-en
     return Container(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -304,6 +303,8 @@ class _CardPpid2State extends State<CardPpid2>
                   ],
                 ),
                 title: Text(
+                  /// TODO: php telefon-t le kell választani, hogy külön mezőben legyen
+                  /// TODO: telefonszámra kattintással tárcsázza a számot
                   kiallito.kapcsolat,
                   style: _textStylePlain,
                 ),
@@ -317,7 +318,8 @@ class _CardPpid2State extends State<CardPpid2>
 
   Widget markak1() {
     return Container(
-      //color: Colors.yellow,
+      /// TODO: ide még kell javítás, vmi más technológia a direkt magasság kiküszöbölésére
+      color: Colors.yellow,
       height: 150,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -330,14 +332,12 @@ class _CardPpid2State extends State<CardPpid2>
             child: Container(
               height: 150,
               width: 150,
-
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.grey,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                       //color: Colors.red,
                       )),
-              //color: Colors.blue,
               child: Column(
                 children: [
                   ListTile(
@@ -528,11 +528,11 @@ class _CardPpid2State extends State<CardPpid2>
         ),
         //      children:
         // ),
-        //Text('első alatt'),
-        Column(
-          children:
-              List.generate(10, (index) => Text('blabla: $index')).toList(),
-        ),
+        Text('kuponok'),
+        // Column(
+        //   children:
+        //       List.generate(10, (index) => Text('blabla: $index')).toList(),
+        // ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children:
