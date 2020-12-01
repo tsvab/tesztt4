@@ -59,7 +59,9 @@ class Page0 extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Page2()),
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Page2(prid: 'CSA19', searchmode: 'P')),
                         );
                       },
                     ),

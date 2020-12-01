@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'cardppid2.dart';
+import 'cardppid3.dart';
 
 class PageCardPpid extends StatelessWidget {
   final ppid;
@@ -13,7 +13,7 @@ class PageCardPpid extends StatelessWidget {
       appBar: AppBar(
         title: Text('PagePpid'),
       ),
-      body: CardPpid2(ppid: ppid),
+      body: CardPpid3(ppid: ppid),
     );
   }
 }

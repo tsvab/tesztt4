@@ -13,34 +13,40 @@ import 'kiallito1.dart';
 import 'services2.dart';
 //import 'dart:math';
 
-class CardPpid2 extends StatefulWidget {
+class CardPpid3 extends StatefulWidget {
   final String ppid;
-//  CardPpid2({Key key, @required this.recordObject}) : super(key: key);
-  CardPpid2({Key key, this.ppid}) : super(key: key);
+//  CardPpid3({Key key, @required this.recordObject}) : super(key: key);
+  CardPpid3({Key key, this.ppid}) : super(key: key);
 
   @override
-  _CardPpid2State createState() => _CardPpid2State();
+  _CardPpid3State createState() => _CardPpid3State();
 }
 
-class _CardPpid2State extends State<CardPpid2>
+class _CardPpid3State extends State<CardPpid3>
     with SingleTickerProviderStateMixin {
   TabController _controller;
   int _tabIndex = 0;
 
   bool _isFavorite = false;
-  bool _getFavoriteDone = false;
   Kiallito kiallito;
+
+  bool _kiallitoInitDone = false;
+  bool _favoriteInitDone = false;
+
+  Future<bool> _getKiallito;
 
   TextStyle _textStylePlain;
   TextStyle _textStyleHeading;
 
   Future<bool> getKiallito(ppid) async {
     // Future<void> getKiallito() async {
-    await fetchKiallito(ppid).then((value) async {
-      kiallito = value;
-      print('getKiallito kiallito: $kiallito');
-    });
-
+    if (!_kiallitoInitDone) {
+      await fetchKiallito(ppid).then((value) async {
+        kiallito = value;
+        //print('getKiallito kiallito: $kiallito');
+        _kiallitoInitDone = true;
+      });
+    }
     return true;
   }
 
@@ -49,15 +55,16 @@ class _CardPpid2State extends State<CardPpid2>
     super.initState();
     _controller = TabController(length: 5, vsync: this);
     _controller.addListener(_handleTabSelection);
+    _getKiallito = getKiallito(widget.ppid);
   }
 
   _handleTabSelection() {
     //print('_controller.index: ${_controller.index}');
     //if (_controller.indexIsChanging) {
+    _tabIndex = _controller.index;
     setState(() {
-      _tabIndex = _controller.index;
+      //print("tab state");
     });
-    //}
   }
 
   @override
@@ -80,15 +87,16 @@ class _CardPpid2State extends State<CardPpid2>
           color: Colors.black,
         );
     return FutureBuilder(
-        future: getKiallito(widget.ppid),
+        //future: getKiallito(widget.ppid),
+        future: _getKiallito,
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           //print('kiallito: $kiallito');
           if (snapshot.hasData) {
-            print("itt vagyok");
+            //print("FutureBuilder itt vagyok");
             getFavorite();
 
             //return Text(kiallito.cegnev);
-            return cardppid2();
+            return cardppid3();
           } else {
             //return Container();
             return Container(
@@ -113,7 +121,7 @@ class _CardPpid2State extends State<CardPpid2>
 
   //https://stackoverflow.com/questions/54642710/tabbarview-with-dynamic-container-height
 
-  Widget cardppid2() {
+  Widget cardppid3() {
     return GestureDetector(
       onHorizontalDragEnd: (dragEndDetails) {
         if (dragEndDetails.primaryVelocity < 0) {
@@ -244,12 +252,17 @@ class _CardPpid2State extends State<CardPpid2>
     const idv1 = 'AU0000025';
     final idv2 = kiallito.ppid;
 
-    print("getFavorite: $reltid, $idv1, $idv2");
-    await FavoriteService.get(reltid, idv1, idv2).then((value) {
-      print("getFavorite: $value");
-      _isFavorite = value == 0 ? false : true;
-      _getFavoriteDone = true;
-    });
+    if (!_favoriteInitDone) {
+      //print("getFavorite: $reltid, $idv1, $idv2");
+      await FavoriteService.get(reltid, idv1, idv2).then((value) {
+        //print("getFavorite: $value");
+        setState(() {
+          //print("favorite stestate");
+          _isFavorite = value == 0 ? false : true;
+        });
+        _favoriteInitDone = true;
+      });
+    }
   }
 
   setFavorite() async {
@@ -257,12 +270,10 @@ class _CardPpid2State extends State<CardPpid2>
     const idv1 = 'AU0000025';
     final idv2 = kiallito.ppid;
     final aktiv = _isFavorite ? '0' : '1';
-    print("aktiv: $aktiv");
 
     final int result = await FavoriteService.set(reltid, idv1, idv2, aktiv);
     String text;
 
-    print("print: $result");
     if (result == 1) {
       setState(() {
         _isFavorite = !_isFavorite;
@@ -285,7 +296,7 @@ class _CardPpid2State extends State<CardPpid2>
   Widget kedvencekhez() {
     String _textbutton = _isFavorite ? 'Törlés a kedvencekből' : 'Kedvencekhez';
 
-    return !_getFavoriteDone
+    return !_favoriteInitDone
         ? Container()
         : RaisedButton(
             child: Text(_textbutton),
