@@ -11,6 +11,8 @@ import 'calendarmodal1.dart';
 import 'calendarmodalcupertino1.dart';
 import 'kiallito1.dart';
 import 'services2.dart';
+import 'constants2.dart' as Constant;
+
 //import 'dart:math';
 
 class CardPpid3 extends StatefulWidget {
@@ -32,11 +34,17 @@ class _CardPpid3State extends State<CardPpid3>
 
   bool _kiallitoInitDone = false;
   bool _favoriteInitDone = false;
+  bool _noteInitDone = false;
 
   Future<bool> _getKiallito;
 
   TextStyle _textStylePlain;
   TextStyle _textStyleHeading;
+
+  List<Tab> _tabbar = [];
+  List<Widget> _tabbarview = [];
+
+  TextEditingController _jegyzetController;
 
   Future<bool> getKiallito(ppid) async {
     // Future<void> getKiallito() async {
@@ -45,6 +53,7 @@ class _CardPpid3State extends State<CardPpid3>
         kiallito = value;
         //print('getKiallito kiallito: $kiallito');
         _kiallitoInitDone = true;
+        setTabs();
       });
     }
     return true;
@@ -52,15 +61,23 @@ class _CardPpid3State extends State<CardPpid3>
 
   @override
   void initState() {
+    //print('init start');
     super.initState();
-    _controller = TabController(length: 5, vsync: this);
-    _controller.addListener(_handleTabSelection);
+
+    _jegyzetController = TextEditingController(text: '');
+
+    //_controller = TabController(length: 5, vsync: this);
     _getKiallito = getKiallito(widget.ppid);
+
+    // _controller = TabController(length: 5, vsync: this);
+    // _controller.addListener(_handleTabSelection);
+//    print("kiallito: ${kiallito}");
   }
 
   _handleTabSelection() {
     //print('_controller.index: ${_controller.index}');
     //if (_controller.indexIsChanging) {
+//    _controller = TabController(length: _tabbar.length, vsync: this);
     _tabIndex = _controller.index;
     setState(() {
       //print("tab state");
@@ -69,6 +86,9 @@ class _CardPpid3State extends State<CardPpid3>
 
   @override
   void dispose() {
+    //print("dispose jegyzet: ${_jegyzetController.text}");
+    setNote();
+
     _controller.dispose();
     super.dispose();
   }
@@ -93,6 +113,7 @@ class _CardPpid3State extends State<CardPpid3>
           //print('kiallito: $kiallito');
           if (snapshot.hasData) {
             //print("FutureBuilder itt vagyok");
+            getNote();
             getFavorite();
 
             //return Text(kiallito.cegnev);
@@ -158,8 +179,8 @@ class _CardPpid3State extends State<CardPpid3>
 
             //tab2(),
 
-            Text(
-                '.. és itt jön a folytatás, ami jól kapcsolódik, függ a felette lévők méretétől :-))))'),
+            // Text(
+            //     '.. és itt jön a folytatás, ami jól kapcsolódik, függ a felette lévők méretétől :-))))'),
             //cegnev(),
             //Container(child: Text('another component')),
           ],
@@ -248,14 +269,14 @@ class _CardPpid3State extends State<CardPpid3>
   }
 
   getFavorite() async {
-    const reltid = 'appfavoriteppid';
+    const reltid = Constant.RELTID_PPID_USER;
     const idv1 = 'AU0000025';
     final idv2 = kiallito.ppid;
 
     if (!_favoriteInitDone) {
       //print("getFavorite: $reltid, $idv1, $idv2");
       await FavoriteService.get(reltid, idv1, idv2).then((value) {
-        //print("getFavorite: $value");
+        //print("getFavorite FavoriteService.get: $value");
         setState(() {
           //print("favorite stestate");
           _isFavorite = value == 0 ? false : true;
@@ -265,26 +286,47 @@ class _CardPpid3State extends State<CardPpid3>
     }
   }
 
+  getNote() async {
+    const reltid = Constant.RELTID_PPID_USER_TEXT;
+    const idv1 = 'AU0000025';
+    final idv2 = kiallito.ppid;
+
+    if (!_noteInitDone) {
+      //print("getNote: $reltid, $idv1, $idv2");
+      await NoteService.get(reltid, idv1, idv2).then((value) {
+        //print("getNote NoteService.get: $value");
+        setState(() {
+          _jegyzetController.text = value;
+        });
+      });
+      _noteInitDone = true;
+    }
+  }
+
   setFavorite() async {
-    const reltid = 'appfavoriteppid';
+    const reltid = Constant.RELTID_PPID_USER;
     const idv1 = 'AU0000025';
     final idv2 = kiallito.ppid;
     final aktiv = _isFavorite ? '0' : '1';
 
     final int result = await FavoriteService.set(reltid, idv1, idv2, aktiv);
-    String text;
+    String textsnack;
 
     if (result == 1) {
       setState(() {
         _isFavorite = !_isFavorite;
       });
-      text = 'Hozzáadva a kedvencekhez!';
+      if (_isFavorite) {
+        textsnack = 'Hozzáadva a kedvencekhez!';
+      } else {
+        textsnack = 'Eltávoltítva a kedvencekből!';
+      }
     } else {
-      text = 'A kedvencekhez hozzáadás nem sikerült!';
+      textsnack = 'A kedvencekhez hozzáadás nem sikerült!';
     }
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(text),
+      content: Text(textsnack),
       duration: Duration(milliseconds: 1500),
       // action: SnackBarAction(
       //   label: 'ACTION',
@@ -298,40 +340,50 @@ class _CardPpid3State extends State<CardPpid3>
 
     return !_favoriteInitDone
         ? Container()
-        : RaisedButton(
-            child: Text(_textbutton),
-            onPressed: () {
-              //result = await FavoriteService.set(reltid, idv1, idv2);
-              setFavorite();
-            },
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              RaisedButton(
+                child: Text(_textbutton),
+                //padding: EdgeInsets.all(10),
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(30.0)),
+                onPressed: () {
+                  //result = await FavoriteService.set(reltid, idv1, idv2);
+                  setFavorite();
+                },
+              ),
+            ],
           );
   }
 
   Widget magunkrol() {
     return Container(
       padding: const EdgeInsets.all(10.0),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-          child: Text(
-            "Rólunk",
-            style: _textStyleHeading,
-          ),
-        ),
-        // Text(
-        //   kiallito.magunkrol,
-        //   style: _textStylePlain,
-        //
-        //   /// DONE text justify
-        //   textAlign: TextAlign.justify,
-        // ),
-        ExpandText(
-          kiallito.magunkrol,
-          textAlign: TextAlign.justify,
-          maxLines: 10,
-          expandOnGesture: false,
-        ),
-      ]),
+      child: kiallito.magunkrol == ''
+          ? Container()
+          : Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                child: Text(
+                  "Rólunk",
+                  style: _textStyleHeading,
+                ),
+              ),
+              // Text(
+              //   kiallito.magunkrol,
+              //   style: _textStylePlain,
+              //
+              //   /// DONE text justify
+              //   textAlign: TextAlign.justify,
+              // ),
+              ExpandText(
+                kiallito.magunkrol,
+                textAlign: TextAlign.justify,
+                maxLines: 10,
+                expandOnGesture: false,
+              ),
+            ]),
     );
   }
 
@@ -369,51 +421,49 @@ class _CardPpid3State extends State<CardPpid3>
               style: _textStyleHeading,
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              ListTile(
-                leading: Icon(Icons.widgets_outlined),
-                title: Text(
-                  kiallito.katagorialist,
-                  style: _textStylePlain,
-                ),
-              ),
-            ],
-          ),
-          ListTile(
-            leading: Icon(Icons.mail),
-            title: Text(
-              kiallito.email,
-              style: _textStylePlain,
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.web_asset),
-            title: Text(
-              kiallito.web,
-              style: _textStylePlain,
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              ListTile(
-                leading: Column(
+          kiallito.katagorialist == ''
+              ? Container()
+              : Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Icon(Icons.location_pin),
+                    ListTile(
+                      leading: Icon(Icons.widgets_outlined),
+                      title: Text(
+                        kiallito.katagorialist,
+                        style: _textStylePlain,
+                      ),
+                    ),
                   ],
                 ),
-                title: Text(
-                  /// TODO: php telefon-t le kell választani, hogy külön mezőben legyen
-                  /// TODO: telefonszámra kattintással tárcsázza a számot
-                  kiallito.kapcsolat,
-                  style: _textStylePlain,
+          kiallito.email == ''
+              ? Container()
+              : ListTile(
+                  leading: Icon(Icons.mail),
+                  title: Text(
+                    kiallito.email,
+                    style: _textStylePlain,
+                  ),
                 ),
-              ),
-            ],
-          ),
+          kiallito.web == ''
+              ? Container()
+              : ListTile(
+                  leading: Icon(Icons.web_asset),
+                  title: Text(
+                    kiallito.web,
+                    style: _textStylePlain,
+                  ),
+                ),
+          kiallito.kapcsolat == ''
+              ? Container()
+              : ListTile(
+                  leading: Icon(Icons.location_pin),
+                  title: Text(
+                    /// TODO: php telefon-t le kell választani, hogy külön mezőben legyen
+                    /// TODO: telefonszámra kattintással tárcsázza a számot
+                    kiallito.kapcsolat,
+                    style: _textStylePlain,
+                  ),
+                ),
         ],
       ),
     );
@@ -422,7 +472,7 @@ class _CardPpid3State extends State<CardPpid3>
   Widget markak1() {
     return Container(
       /// TODO: ide még kell javítás, vmi más technológia a direkt magasság kiküszöbölésére
-      color: Colors.yellow,
+      //color: Colors.yellow,
       height: 150,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -437,7 +487,7 @@ class _CardPpid3State extends State<CardPpid3>
               height: 150,
               width: 150,
               decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                       //color: Colors.red,
@@ -602,6 +652,58 @@ class _CardPpid3State extends State<CardPpid3>
     );
   }
 
+  setNote() async {
+    const reltid = Constant.RELTID_PPID_USER_TEXT;
+    const idv1 = 'AU0000025';
+    final idv2 = kiallito.ppid;
+    final text1 = _jegyzetController.text;
+    final aktiv = _isFavorite ? '0' : '1';
+
+    if (text1 != '') {
+      final int result =
+          await NoteService.set(reltid, idv1, idv2, text1, aktiv);
+      String textsnack;
+
+      if (result == 1) {
+        textsnack = 'A mentés sikerült!';
+      } else {
+        textsnack = 'A mentés nem sikerült!';
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(textsnack),
+        duration: Duration(milliseconds: 1500),
+      ));
+    }
+  }
+
+  Widget jegyzet1(String reltid) {
+    //return Text('jegyzet ' + idt);
+    return Column(
+      //crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: _jegyzetController,
+            // // onChanged: () {
+            // //   print('befejezte');
+            // // },
+            // onChanged: (text) {},
+            // // onFieldSubmitted: (text) {
+            // //   print('befejezte $text');
+            // // },
+            decoration: InputDecoration(
+              hintText: 'Írjon feljegyzést a kiállítóról',
+            ),
+            maxLines: 10,
+            textInputAction: TextInputAction.done,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget tab1() {
     return Column(children: [
       tabbar1(),
@@ -609,135 +711,132 @@ class _CardPpid3State extends State<CardPpid3>
     ]);
   }
 
-  // Widget tab2() {
-  //   return DefaultTabController(
-  //     length: 4,
-  //     child: Column(children: [
-  //       tabbar1(),
-  //       tabbarview3(),
-  //     ]),
-  //   );
-  // }
+  setTabs() {
+    var _textstyle = TextStyle(color: Colors.black, fontSize: 20);
+    _tabbar = [];
+    _tabbarview = [];
+    if (true) {
+      _tabbar.add(Tab(
+        child: Text(
+          'Leírás',
+          style: _textstyle,
+        ),
+      ));
+      _tabbarview.add(Column(
+        children: [
+          magunkrol(),
+          Divider(
+            color: Theme.of(context).primaryColor,
+          ),
+          terkep(),
+          Divider(
+            color: Theme.of(context).primaryColor,
+          ),
+          info(),
+          Divider(
+            color: Theme.of(context).primaryColor,
+          ),
+          marka(),
+          Divider(
+            color: Theme.of(context).primaryColor,
+          ),
+        ],
+      ));
+    }
+    if (true) {
+      _tabbar.add(Tab(
+        child: Text(
+          'Kuponok',
+          style: _textstyle,
+        ),
+      ));
+      _tabbarview.add(Text('kuponok'));
+    }
+    if (true) {
+      _tabbar.add(Tab(
+        child: Text(
+          'Újdonságok',
+          style: TextStyle(color: Colors.black, fontSize: 20),
+        ),
+      ));
+      _tabbarview.add(Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: List.generate(20, (index) => Text('blabla: $index')).toList(),
+      ));
+    }
+    if (true) {
+      _tabbar.add(Tab(
+        child: Text(
+          'Jegyzet',
+          style: TextStyle(color: Colors.black, fontSize: 20),
+        ),
+      ));
+      _tabbarview.add(jegyzet1(Constant.RELTID_PPID_USER_TEXT));
+    }
+    if (true) {
+      _tabbar.add(Tab(
+        child: Text(
+          'Időpont foglalás',
+          style: TextStyle(color: Colors.black, fontSize: 20),
+        ),
+      ));
+      _tabbarview.add(calendar1());
+    }
+
+    _controller = TabController(length: _tabbar.length, vsync: this);
+    _controller.addListener(_handleTabSelection);
+  }
 
   Widget tabbar1() {
     return TabBar(
       controller: _controller,
       isScrollable: true,
-      tabs: [
-        Tab(
-          child: Text(
-            'Leírás',
-            style: TextStyle(color: Colors.black, fontSize: 20),
-          ),
-          // icon: Icon(
-          //   Icons.star,
-          //   color: Colors.blue,
-          // ),
-        ),
-        Tab(
-          child: Text(
-            'Kuponok',
-            style: TextStyle(color: Colors.black, fontSize: 20),
-          ),
-        ),
-        Tab(
-          child: Text(
-            'Újdonságok',
-            style: TextStyle(color: Colors.black, fontSize: 20),
-          ),
-        ),
-        Tab(
-          child: Text(
-            'Jegyzet',
-            style: TextStyle(color: Colors.black, fontSize: 20),
-          ),
-        ),
-        Tab(
-          child: Text(
-            'Időpont foglalás',
-            style: TextStyle(color: Colors.black, fontSize: 20),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget tabbarview3() {
-    return Expanded(
-      //height: 400,
-      child: TabBarView(
-        children: [
-          Container(
-            child: Column(
-              children: [
-                magunkrol(),
-                Divider(
-                  color: Theme.of(context).primaryColor,
-                ),
-                terkep(),
-                Divider(
-                  color: Theme.of(context).primaryColor,
-                ),
-                info(),
-                Divider(
-                  color: Theme.of(context).primaryColor,
-                ),
-                marka(),
-                Divider(
-                  color: Theme.of(context).primaryColor,
-                ),
-              ],
-            ),
-          ),
-          // Container(height: 100, child: Text('rólunk')),
-          // Container(height: 100, child: Text('rólunk')),
-          // Container(height: 100, child: Text('rólunk')),
-          // Container(height: 100, child: Text('rólunk')),
-          Text('kuponok'),
-          Text('újdonság'),
-          Text('jegyzet'),
-          Text('időpont foglalás'),
-        ],
-      ),
+      tabs: _tabbar,
     );
   }
 
   Widget tabbarview2() {
     return Container(
-      child: [
-        Column(
-          children: [
-            magunkrol(),
-            Divider(
-              color: Theme.of(context).primaryColor,
-            ),
-            terkep(),
-            Divider(
-              color: Theme.of(context).primaryColor,
-            ),
-            info(),
-            Divider(
-              color: Theme.of(context).primaryColor,
-            ),
-            marka(),
-            Divider(
-              color: Theme.of(context).primaryColor,
-            ),
-          ],
-        ),
-        //      children:
-        // ),
-        Text('kuponok'),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:
-              List.generate(20, (index) => Text('blabla: $index')).toList(),
-        ),
-        Text('jegyzet'),
-        calendar1(),
-      ][_tabIndex],
+      child: _tabbarview[_tabIndex],
     );
   }
+
+  // Widget tabbarview2() {
+  //   return Container(
+  //     child: [
+  //       Column(
+  //         children: [
+  //           magunkrol(),
+  //           Divider(
+  //             color: Theme.of(context).primaryColor,
+  //           ),
+  //           terkep(),
+  //           Divider(
+  //             color: Theme.of(context).primaryColor,
+  //           ),
+  //           info(),
+  //           Divider(
+  //             color: Theme.of(context).primaryColor,
+  //           ),
+  //           marka(),
+  //           Divider(
+  //             color: Theme.of(context).primaryColor,
+  //           ),
+  //         ],
+  //       ),
+  //       //      children:
+  //       // ),
+  //       Text('kuponok'),
+  //       Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children:
+  //             List.generate(20, (index) => Text('blabla: $index')).toList(),
+  //       ),
+  //       Text('jegyzet'),
+  //       calendar1(),
+  //     ][_tabIndex],
+  //   );
+  // }
 
   // Widget tabbarview3() {
   //   return Container(
