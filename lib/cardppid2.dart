@@ -434,7 +434,8 @@ class _CardPpid2State extends State<CardPpid2>
               child: Column(
                 children: [
                   ListTile(
-                    horizontalTitleGap: 10,
+                    //horizontalTitleGap: 10,
+                    //horizontalTitleGap: 10,
                     // leading: CircleAvatar(
                     //   child: Text('CA'),
                     // ),

@@ -86,10 +86,19 @@ class _CardPpid3State extends State<CardPpid3>
 
   @override
   void dispose() {
-    //print("dispose jegyzet: ${_jegyzetController.text}");
-    setNote();
-
+    //print('dispose-ban');
+    // print("dispose jegyzet: ${_jegyzetController.text}");
+    // print("setnote előtt");
+    //setNote();
+    // print("setnote után");
+    // await setNote().then((value) async {
+    //
+    //   _controller.dispose();
+    //   print("_controller dispose után");
+    //   super.dispose();
+    // });
     _controller.dispose();
+    // print("_controller dispose után");
     super.dispose();
   }
 
@@ -162,6 +171,9 @@ class _CardPpid3State extends State<CardPpid3>
             //   width: double.infinity,
             //   height: 300,
             //   color: Colors.yellow,
+            // ),
+            // AppBar(
+            //   title: Text('sss'),
             // ),
             logo(),
             cegnev(),
@@ -308,8 +320,12 @@ class _CardPpid3State extends State<CardPpid3>
     const idv1 = 'AU0000025';
     final idv2 = kiallito.ppid;
     final aktiv = _isFavorite ? '0' : '1';
+    //print('setFavorite előtt');
+    int result = await FavoriteService.set(reltid, idv1, idv2, aktiv);
+    //print('result: $result');
+    // print(
+    //     '???????????????????????????????????????????????????????????????????????????????????????????');
 
-    final int result = await FavoriteService.set(reltid, idv1, idv2, aktiv);
     String textsnack;
 
     if (result == 1) {
@@ -495,7 +511,7 @@ class _CardPpid3State extends State<CardPpid3>
               child: Column(
                 children: [
                   ListTile(
-                    horizontalTitleGap: 10,
+                    //horizontalTitleGap: 10,
                     // leading: CircleAvatar(
                     //   child: Text('CA'),
                     // ),
@@ -699,6 +715,18 @@ class _CardPpid3State extends State<CardPpid3>
             maxLines: 10,
             textInputAction: TextInputAction.done,
           ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            FloatingActionButton(
+              onPressed: () {
+                setNote();
+              },
+              tooltip: 'save',
+              child: Icon(Icons.save),
+            ),
+          ],
         ),
       ],
     );

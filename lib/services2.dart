@@ -37,14 +37,15 @@ class FavoriteService {
         params;
     url = Uri.encodeFull(url);
 
-    final response = await http.get(url);
     //print("url: $url");
+    final response = await http.get(url);
+    //print("response.body: ${response.body}");
+    //print("response.statusCode: ${response.statusCode}");
+    //print("json ${json.decode(response.body)['result']}");
     if (response.statusCode == 200) {
       return json.decode(response.body)['result'];
     } else {
-      return 0;
-      // throw Exception(
-      //     allTranslations.text('failed_to_set') + ' FavoriteService.set');
+      throw Exception('Failed to load FavoriteService.set');
     }
   }
 
@@ -83,9 +84,8 @@ class FavoriteService {
       //print(json.decode(response.body));
       return json.decode(response.body)['result'];
     } else {
-      return 0;
-      // throw Exception(
-      //     allTranslations.text('failed_to_set') + ' FavoriteService.set');
+//      return 0;
+      throw Exception('Failed to load FavoriteService.get');
     }
   }
 }
@@ -123,13 +123,11 @@ class NoteService {
         params;
     url = Uri.encodeFull(url);
     final response = await http.get(url);
-    //print("url: $url");
+    print("url: $url");
     if (response.statusCode == 200) {
       return json.decode(response.body)['result'];
     } else {
-      return 0;
-      // throw Exception(
-      //     allTranslations.text('failed_to_set') + ' FavoriteService.set');
+      throw Exception('Failed to load NoteService.set');
     }
   }
 
@@ -169,9 +167,7 @@ class NoteService {
       //print(json.decode(response.body));
       return json.decode(response.body)['result'];
     } else {
-      return '';
-      // throw Exception(
-      //     allTranslations.text('failed_to_set') + ' FavoriteService.set');
+      throw Exception('Failed to load NoteService.get');
     }
   }
 }
