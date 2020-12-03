@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -46,10 +48,10 @@ class _CardPpid3State extends State<CardPpid3>
   List<Widget> _tabbarview = [];
 
   TextEditingController _jegyzetController;
-  String _jegyzetSubmitted;
+  String _jegyzetSaved;
 
-  var _blankFocusNode = FocusNode();
-  FocusNode _focusNode;
+  // var _blankFocusNode = FocusNode();
+  // FocusNode _focusNode;
 
   Future<bool> getKiallito(ppid) async {
     // Future<void> getKiallito() async {
@@ -69,7 +71,7 @@ class _CardPpid3State extends State<CardPpid3>
     //print('init start');
     super.initState();
 
-    _focusNode = FocusNode();
+    // _focusNode = FocusNode();
     _jegyzetController = TextEditingController(text: '');
 
     //_controller = TabController(length: 5, vsync: this);
@@ -90,25 +92,42 @@ class _CardPpid3State extends State<CardPpid3>
     });
   }
 
+  beforeDispose() async {
+    print("beforeDispose eleje");
+
+    await setNote(_jegyzetController.text).then((value) {
+      print("setnote után ");
+      // _controller.dispose();
+      // _jegyzetController.dispose();
+      print("controllerek elbontva");
+    });
+    print("beforeDispose vége");
+  }
+
   @override
   void dispose() {
     //print('dispose-ban');
     // print("dispose jegyzet: ${_jegyzetController.text}");
+
+    // _focusNode.dispose();
+    // print("dispose setnote előtt");
+    //setNote(_jegyzetController.text);
+    beforeDispose();
+    //print("dispose setnote után");
+
     // print("setnote előtt");
-    //setNote();
-    // print("setnote után");
     // await setNote().then((value) async {
-    //
-    //   _controller.dispose();
-    //   print("_controller dispose után");
+    //   print("dispose előtt");
     //   super.dispose();
+    //   print("dispose után");
     // });
-
-    _focusNode.dispose();
-
+    print("kkkkkkkkkkkkkkkk");
     _controller.dispose();
-    // print("_controller dispose után");
+    _jegyzetController.dispose();
+    print("_jegyzetController.text ${_jegyzetController}");
+    print("super dispose előtt");
     super.dispose();
+    print("super dispose után");
   }
 
   @override
@@ -311,7 +330,7 @@ class _CardPpid3State extends State<CardPpid3>
     }
   }
 
-  getNote() async {
+  Future<void> getNote() async {
     const reltid = Constant.RELTID_PPID_USER_TEXT;
     const idv1 = 'AU0000025';
     final idv2 = kiallito.ppid;
@@ -321,6 +340,7 @@ class _CardPpid3State extends State<CardPpid3>
       await NoteService.get(reltid, idv1, idv2).then((value) {
         //print("getNote NoteService.get: $value");
         setState(() {
+          _jegyzetSaved = value;
           _jegyzetController.text = value;
         });
       });
@@ -681,29 +701,59 @@ class _CardPpid3State extends State<CardPpid3>
     );
   }
 
-  setNote() async {
+  Future<void> setNote(String note) async {
+    // Timer(Duration(seconds: 2), () {
+    //   print("setNote megtörtént a mentés...");
+    // });
+    //
+    // return;
+    print("setNote eleje");
     const reltid = Constant.RELTID_PPID_USER_TEXT;
     const idv1 = 'AU0000025';
     final idv2 = kiallito.ppid;
-    final text1 = _jegyzetController.text;
-    final aktiv = _isFavorite ? '0' : '1';
+    final text1 = note;
+    final aktiv = '1';
 
-    if (text1 != '') {
+    if (note != _jegyzetSaved) {
+      print("setNote mentés előtt");
+
+      // print("setNote késleltetés előtt");
+      // Timer(Duration(seconds: 10), () async {
+      //   final int result =
+      //       await NoteService.set(reltid, idv1, idv2, text1, aktiv);
+      //   print("setNote megtörtént a mentés...");
+      //   print("setNote megtörtént a késleltetés");
+      // });
+
       final int result =
           await NoteService.set(reltid, idv1, idv2, text1, aktiv);
-      String textsnack;
 
       if (result == 1) {
-        textsnack = 'A mentés sikerült!';
-      } else {
-        textsnack = 'A mentés nem sikerült!';
+        //_jegyzetSaved = note;
+        Timer(Duration(seconds: 5), () async {
+          print("_jegyzetSaved = note előtt");
+          print(_jegyzetSaved);
+          print(_jegyzetController.text);
+          _jegyzetSaved = note;
+          print("_jegyzetSaved = note után");
+        });
       }
+      print("setNote megtörtént a mentés...");
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(textsnack),
-        duration: Duration(milliseconds: 1500),
-      ));
+      // String textsnack;
+      //
+      // if (result == 1) {
+      //   textsnack = 'A mentés sikerült!';
+      // } else {
+      //   textsnack = 'A mentés nem sikerült!';
+      // }
+
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text(textsnack),
+      //   duration: Duration(milliseconds: 1500),
+      // ));
     }
+    print("setNote végén");
   }
 
   Widget jegyzet1(String reltid) {
@@ -714,22 +764,22 @@ class _CardPpid3State extends State<CardPpid3>
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
-            focusNode: _focusNode,
+            // focusNode: _focusNode,
             controller: _jegyzetController,
             onEditingComplete: () {
               print("onEditingComplete: ${_jegyzetController.text}");
-              _focusNode.unfocus();
-              setNote();
+              // _focusNode.unfocus();
+              setNote(_jegyzetController.text);
             },
-            onSubmitted: (text) {
-              print("onSubmitted: $text");
-              _jegyzetSubmitted = text;
-              //setState(() {});
-            },
+            // onSubmitted: (text) {
+            //   print("onSubmitted: $text");
+            //   //_jegyzetSubmitted = text;
+            //   //setState(() {});
+            // },
 
-            //onChanged: (text) {
-            // print("onChanged: $text");
-            //},
+            // onChanged: (text) {
+            //   print("onChanged: $text");
+            // },
             // // onChanged: () {
             // //   print('befejezte');
             // // },
@@ -742,23 +792,23 @@ class _CardPpid3State extends State<CardPpid3>
             ),
             //textInputAction: TextInputAction.done,
             //keyboardType: TextInputType.multiline,
-            textInputAction: TextInputAction.newline,
+            textInputAction: TextInputAction.done,
             keyboardType: TextInputType.multiline,
             maxLines: 5,
           ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            FloatingActionButton(
-              onPressed: () {
-                //setNote();
-              },
-              tooltip: 'save',
-              child: Icon(Icons.save),
-            ),
-          ],
-        ),
+        // Column(
+        //   crossAxisAlignment: CrossAxisAlignment.stretch,
+        //   children: [
+        //     FloatingActionButton(
+        //       onPressed: () {
+        //         //setNote();
+        //       },
+        //       tooltip: 'save',
+        //       child: Icon(Icons.save),
+        //     ),
+        //   ],
+        // ),
       ],
     );
   }

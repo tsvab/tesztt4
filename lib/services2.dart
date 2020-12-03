@@ -123,7 +123,7 @@ class NoteService {
         params;
     url = Uri.encodeFull(url);
     final response = await http.get(url);
-    print("url: $url");
+    //print("url: $url");
     if (response.statusCode == 200) {
       return json.decode(response.body)['result'];
     } else {
