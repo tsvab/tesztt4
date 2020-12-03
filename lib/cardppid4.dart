@@ -18,16 +18,16 @@ import 'services2.dart';
 
 //import 'dart:math';
 
-class CardPpid3 extends StatefulWidget {
+class CardPpid4 extends StatefulWidget {
   final String ppid;
-//  CardPpid3({Key key, @required this.recordObject}) : super(key: key);
-  CardPpid3({Key key, this.ppid}) : super(key: key);
+//  CardPpid4({Key key, @required this.recordObject}) : super(key: key);
+  CardPpid4({Key key, this.ppid}) : super(key: key);
 
   @override
-  _CardPpid3State createState() => _CardPpid3State();
+  _CardPpid4State createState() => _CardPpid4State();
 }
 
-class _CardPpid3State extends State<CardPpid3>
+class _CardPpid4State extends State<CardPpid4>
     with SingleTickerProviderStateMixin {
   TabController _controller;
   int _tabIndex = 0;
@@ -155,7 +155,7 @@ class _CardPpid3State extends State<CardPpid3>
             getFavorite();
 
             //return Text(kiallito.cegnev);
-            return cardppid3();
+            return cardppid4();
           } else {
             //return Container();
             return Container(
@@ -180,7 +180,7 @@ class _CardPpid3State extends State<CardPpid3>
 
   //https://stackoverflow.com/questions/54642710/tabbarview-with-dynamic-container-height
 
-  Widget cardppid3() {
+  Widget cardppid4() {
     return GestureDetector(
       onHorizontalDragEnd: (dragEndDetails) {
         if (dragEndDetails.primaryVelocity < 0) {
