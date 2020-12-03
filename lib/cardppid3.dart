@@ -93,15 +93,15 @@ class _CardPpid3State extends State<CardPpid3>
   }
 
   beforeDispose() async {
-    print("beforeDispose eleje");
+    //print("beforeDispose eleje");
 
     await setNote(_jegyzetController.text).then((value) {
-      print("setnote után ");
+      //print("setnote után ");
       // _controller.dispose();
       // _jegyzetController.dispose();
-      print("controllerek elbontva");
+      //print("controllerek elbontva");
     });
-    print("beforeDispose vége");
+    //print("beforeDispose vége");
   }
 
   @override
@@ -121,13 +121,14 @@ class _CardPpid3State extends State<CardPpid3>
     //   super.dispose();
     //   print("dispose után");
     // });
-    print("kkkkkkkkkkkkkkkk");
+    // print("kkkkkkkkkkkkkkkk");
     _controller.dispose();
     _jegyzetController.dispose();
-    print("_jegyzetController.text ${_jegyzetController}");
-    print("super dispose előtt");
+    // print("_jegyzetController.text ${_jegyzetController}");
+    // print("super dispose előtt");
+
     super.dispose();
-    print("super dispose után");
+    //print("super dispose után");
   }
 
   @override
@@ -355,9 +356,6 @@ class _CardPpid3State extends State<CardPpid3>
     final aktiv = _isFavorite ? '0' : '1';
     //print('setFavorite előtt');
     int result = await FavoriteService.set(reltid, idv1, idv2, aktiv);
-    //print('result: $result');
-    // print(
-    //     '???????????????????????????????????????????????????????????????????????????????????????????');
 
     String textsnack;
 
@@ -707,7 +705,7 @@ class _CardPpid3State extends State<CardPpid3>
     // });
     //
     // return;
-    print("setNote eleje");
+    //print("setNote eleje");
     const reltid = Constant.RELTID_PPID_USER_TEXT;
     const idv1 = 'AU0000025';
     final idv2 = kiallito.ppid;
@@ -715,7 +713,7 @@ class _CardPpid3State extends State<CardPpid3>
     final aktiv = '1';
 
     if (note != _jegyzetSaved) {
-      print("setNote mentés előtt");
+      //print("setNote mentés előtt");
 
       // print("setNote késleltetés előtt");
       // Timer(Duration(seconds: 10), () async {
@@ -729,16 +727,14 @@ class _CardPpid3State extends State<CardPpid3>
           await NoteService.set(reltid, idv1, idv2, text1, aktiv);
 
       if (result == 1) {
-        //_jegyzetSaved = note;
-        Timer(Duration(seconds: 5), () async {
-          print("_jegyzetSaved = note előtt");
-          print(_jegyzetSaved);
-          print(_jegyzetController.text);
-          _jegyzetSaved = note;
-          print("_jegyzetSaved = note után");
-        });
+        _jegyzetSaved = note;
+        // Timer(Duration(seconds: 5), () async {
+        //   print(_jegyzetSaved);
+        //   print(_jegyzetController.text);
+        //   _jegyzetSaved = note;
+        // });
       }
-      print("setNote megtörtént a mentés...");
+      print("setNote megtörtént a mentés...${note}");
 
       // String textsnack;
       //
@@ -753,7 +749,7 @@ class _CardPpid3State extends State<CardPpid3>
       //   duration: Duration(milliseconds: 1500),
       // ));
     }
-    print("setNote végén");
+    //print("setNote végén");
   }
 
   Widget jegyzet1(String reltid) {
@@ -767,7 +763,7 @@ class _CardPpid3State extends State<CardPpid3>
             // focusNode: _focusNode,
             controller: _jegyzetController,
             onEditingComplete: () {
-              print("onEditingComplete: ${_jegyzetController.text}");
+              //print("onEditingComplete: ${_jegyzetController.text}");
               // _focusNode.unfocus();
               setNote(_jegyzetController.text);
             },
@@ -789,12 +785,22 @@ class _CardPpid3State extends State<CardPpid3>
             // // },
             decoration: InputDecoration(
               hintText: 'Írjon feljegyzést a kiállítóról',
+              border: UnderlineInputBorder(),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue),
+                //  when the TextFormField in unfocused
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue),
+                //  when the TextFormField in focused
+              ),
             ),
             //textInputAction: TextInputAction.done,
             //keyboardType: TextInputType.multiline,
-            textInputAction: TextInputAction.done,
+            textInputAction: TextInputAction.next,
             keyboardType: TextInputType.multiline,
-            maxLines: 5,
+            minLines: 1,
+            maxLines: 10,
           ),
         ),
         // Column(
