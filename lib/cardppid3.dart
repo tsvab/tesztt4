@@ -3,15 +3,16 @@ import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 //import 'package:http/http.dart' as http;
 import 'calendarmodal1.dart';
 import 'calendarmodalcupertino1.dart';
+import 'constants2.dart' as Constant;
 import 'kiallito1.dart';
 import 'services2.dart';
-import 'constants2.dart' as Constant;
 
 //import 'dart:math';
 
@@ -45,6 +46,10 @@ class _CardPpid3State extends State<CardPpid3>
   List<Widget> _tabbarview = [];
 
   TextEditingController _jegyzetController;
+  String _jegyzetSubmitted;
+
+  var _blankFocusNode = FocusNode();
+  FocusNode _focusNode;
 
   Future<bool> getKiallito(ppid) async {
     // Future<void> getKiallito() async {
@@ -64,6 +69,7 @@ class _CardPpid3State extends State<CardPpid3>
     //print('init start');
     super.initState();
 
+    _focusNode = FocusNode();
     _jegyzetController = TextEditingController(text: '');
 
     //_controller = TabController(length: 5, vsync: this);
@@ -97,6 +103,9 @@ class _CardPpid3State extends State<CardPpid3>
     //   print("_controller dispose után");
     //   super.dispose();
     // });
+
+    _focusNode.dispose();
+
     _controller.dispose();
     // print("_controller dispose után");
     super.dispose();
@@ -164,6 +173,10 @@ class _CardPpid3State extends State<CardPpid3>
           }
         }
       },
+      // onTap: () {
+      //   FocusScope.of(context).requestFocus(_blankFocusNode);
+      //   _jegyzetController.text = _jegyzetSubmitted;
+      // },
       child: ListView(children: <Widget>[
         Column(
           children: <Widget>[
@@ -701,7 +714,22 @@ class _CardPpid3State extends State<CardPpid3>
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
+            focusNode: _focusNode,
             controller: _jegyzetController,
+            onEditingComplete: () {
+              print("onEditingComplete: ${_jegyzetController.text}");
+              _focusNode.unfocus();
+              setNote();
+            },
+            onSubmitted: (text) {
+              print("onSubmitted: $text");
+              _jegyzetSubmitted = text;
+              //setState(() {});
+            },
+
+            //onChanged: (text) {
+            // print("onChanged: $text");
+            //},
             // // onChanged: () {
             // //   print('befejezte');
             // // },
@@ -712,8 +740,11 @@ class _CardPpid3State extends State<CardPpid3>
             decoration: InputDecoration(
               hintText: 'Írjon feljegyzést a kiállítóról',
             ),
-            maxLines: 10,
-            textInputAction: TextInputAction.done,
+            //textInputAction: TextInputAction.done,
+            //keyboardType: TextInputType.multiline,
+            textInputAction: TextInputAction.newline,
+            keyboardType: TextInputType.multiline,
+            maxLines: 5,
           ),
         ),
         Column(
@@ -721,7 +752,7 @@ class _CardPpid3State extends State<CardPpid3>
           children: [
             FloatingActionButton(
               onPressed: () {
-                setNote();
+                //setNote();
               },
               tooltip: 'save',
               child: Icon(Icons.save),
@@ -780,7 +811,7 @@ class _CardPpid3State extends State<CardPpid3>
       ));
       _tabbarview.add(Text('kuponok'));
     }
-    if (true) {
+    if (false) {
       _tabbar.add(Tab(
         child: Text(
           'Újdonságok',
