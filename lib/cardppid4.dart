@@ -193,10 +193,11 @@ class _CardPpid4State extends State<CardPpid4>
           }
         }
       },
-      // onTap: () {
+      onTap: () {
+        FocusScope.of(context).unfocus();
       //   FocusScope.of(context).requestFocus(_blankFocusNode);
       //   _jegyzetController.text = _jegyzetSubmitted;
-      // },
+      },
       child: ListView(children: <Widget>[
         Column(
           children: <Widget>[
@@ -760,7 +761,7 @@ class _CardPpid4State extends State<CardPpid4>
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextField(
-            // focusNode: _focusNode,
+            // focusNode: _focusNode,3
             controller: _jegyzetController,
             onEditingComplete: () {
               //print("onEditingComplete: ${_jegyzetController.text}");

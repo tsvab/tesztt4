@@ -28,7 +28,7 @@ packages:
       name: cached_network_image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.3"
+    version: "2.4.1"
   characters:
     dependency: transitive
     description:
@@ -77,7 +77,7 @@ packages:
       name: cupertino_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1+1"
   expand_widget:
     dependency: "direct main"
     description:
@@ -384,7 +384,7 @@ packages:
       name: vibration
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.2"
+    version: "1.7.3"
   vibration_web:
     dependency: transitive
     description:
